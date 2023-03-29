@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	
+	<entry key="selectListCount">
+		SELECT COUNT(*) AS COUNT
+		FROM BOARD
+		WHRER (BOARD_TYPE = 1) AND STATUS="Y"
+	</entry>
+	
+	
+	<entry key="selectMateList">
+		SELECT BOARD_NO,
+			   BOARD_TITLE, 
+			   BOARD_CONTENT,
+			   USER_NICKNAME,
+			   B.ADDRESS,
+			   B.CREATE_DATE,
+			   COUNT
+		FROM BOARD B
+		JOIN MEMBER M ON(BOARD_WRITER = USER_NO)
+		WHERE BOARD_TYPE = 1 AND B.STATUS='Y'
+	</entry>
+	
+	<entry key="insertMateBoard">
+			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER)
+			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,2)
+	</entry>
+	
+</properties>
