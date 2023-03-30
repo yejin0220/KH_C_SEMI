@@ -1,9 +1,11 @@
 package com.kh.mateboard.model.service;
 
-import java.sql.Connection; 
+import java.sql.Connection;  
 import java.util.ArrayList;
 
 import static com.kh.common.JDBCTemplate.*;
+
+import com.kh.common.model.PageInfo;
 import com.kh.mateboard.model.dao.mateBoardDao;
 import com.kh.mateboard.model.vo.Board;
 
@@ -21,14 +23,13 @@ public class mateBoardService {
 				
 	}
 	
-	public ArrayList<Board> selectMateList(){
+	
+	public ArrayList<Board> selectMateList(PageInfo pi){
 		Connection conn = getConnection();
 		
-		ArrayList<Board> list = new mateBoardDao().selectMateList(conn);
+		ArrayList<Board> list = new mateBoardDao().selectMateList(conn, pi);
 		
 		close(conn);
-		
-
 		return list;
 	}
 	

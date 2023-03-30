@@ -1,16 +1,17 @@
-<%@ page import="java.util.ArrayList, com.kh.mateboard.model.vo.Board" %>
+<%@ page import="java.util.ArrayList, com.kh.mateboard.model.vo.Board, com.kh.common.model.PageInfo" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
    	String contextPath = request.getContextPath();
    	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
-	//PageInfo pi = (PageInfo)request.getAttribute("pi");
+	PageInfo pi = (PageInfo)request.getAttribute("pi");
 	//Board b = (Board)request.getAttribute("b");
 	
-/* 	int currentPage = pi.getCurrentPage();
+	
+ 	int currentPage = pi.getCurrentPage();
 	int startPage = pi.getStartPage();
 	int endPage = pi.getEndPage();
-	int maxPage = pi.getMaxPage(); */
+	int maxPage = pi.getMaxPage(); 
 %>
 <!DOCTYPE html>
 <html>
@@ -35,6 +36,7 @@
 }
 #card{
 	width:300px;
+	height:400px;
 	margin-bottom:50px;
 }
 
@@ -64,22 +66,22 @@
                 <div class="search_box">
                     <select name="search1" id="" onchange="categoryChange(this)" class="search1">
                       <option value>광역시/도 선택</option>
-                      <option value="general01">강원도</option>
-                      <option value="general02">경기도</option>
-                      <option value="general03">경상남도</option>
-                      <option value="general04">경상북도</option>
-                      <option value="general05">광주광역시</option>
-                      <option value="general06">대구광역시</option>
-                      <option value="general07">대전광역시</option>
-                      <option value="general08">부산광역시</option>
-                      <option value="general09">서울특별시</option>
-                      <option value="general10">울산광역시</option>
-                      <option value="general11">인천광역시</option>
-                      <option value="general12">전라남도</option>
-                      <option value="general13">전라북도</option>
-                      <option value="general14">제주도</option>
-                      <option value="general15">충청남도</option>
-                      <option value="general16">충청북도</option>
+                      <option value="강원도">강원도</option>
+                      <option value="경기도">경기도</option>
+                      <option value="경상남도">경상남도</option>
+                      <option value="경상북도">경상북도</option>
+                      <option value="광주광역시">광주광역시</option>
+                      <option value="대구광역시">대구광역시</option>
+                      <option value="대전광역시">대전광역시</option>
+                      <option value="부산광역시">부산광역시</option>
+                      <option value="서울특별시">서울특별시</option>
+                      <option value="울산광역시">울산광역시</option>
+                      <option value="인천광역시">인천광역시</option>
+                      <option value="전라남도">전라남도</option>
+                      <option value="전라북도">전라북도</option>
+                      <option value="제주도">제주도</option>
+                      <option value="충청남도">충청남도</option>
+                      <option value="충청북도">충청북도</option>
                     </select>
                 </div>
                 <div class="search_box">
@@ -111,7 +113,7 @@
 			                    <span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
 			                    <hr>
 			                    <div class="card-content">
-			                          	<p>	<%=b.getAddress() %></p>
+			                          	<p>	<%=%></p>
 			                          	<p> <%=b.getBoardContent() %></p>
 			                    </div>
 			                    <div class="card-footer">
@@ -185,28 +187,37 @@
                 </div>
             </div>
              --%>
+             <!-- 페이징바 영역 -->
 	         <nav aria-label="Page navigation example">
 	            <ul class="pagination">
+	            
+	            <% if(currentPage != 1) { %>
 	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Previous">
+	                <a class="page-link" href="<%=contextPath %>/list.mate?currentPage=<%=currentPage -1 %>" aria-label="Previous">
 	                  <span aria-hidden="true">&laquo;</span>
 	                </a>
 	              </li>
-	              <li class="page-item"><a class="page-link" href="#">1</a></li>
-	              <li class="page-item"><a class="page-link" href="#">2</a></li>
-	              <li class="page-item"><a class="page-link" href="#">3</a></li>
-	              <li class="page-item"><a class="page-link" href="#">4</a></li>
-	              <li class="page-item"><a class="page-link" href="#">5</a></li>
-	              <li class="page-item"><a class="page-link" href="#">6</a></li>
-	              <li class="page-item"><a class="page-link" href="#">7</a></li>
-	              <li class="page-item"><a class="page-link" href="#">8</a></li>
-	              <li class="page-item"><a class="page-link" href="#">9</a></li>
-	              <li class="page-item"><a class="page-link" href="#">10</a></li>
-	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Next">
-	                  <span aria-hidden="true">&raquo;</span>
-	                </a>
-	              </li>
+	        	<%} %>
+	             
+	             <%for(int i = startPage; i<=endPage; i++) { %>
+	             
+	             	<%if( i!= currentPage) { %>
+	             		<li class="page-item">
+	             			<a class="page-link" href="<%=contextPath%>/list.mate?currentPage=<%=i%>"><%=i %></a>
+	             		</li>
+	             	<%}else{ %>
+	             		<li class="page-item"><%=i %></li>
+	             	<%} %>
+		    
+	             <%} %>
+	             
+	             <%if(currentPage != maxPage){ %>
+		              <li class="page-item">
+		                <a class="page-link" href="#" aria-label="Next">
+		                  <span aria-hidden="true">&raquo;</span>
+		                </a>
+		              </li>
+	              <%} %>
 	            </ul>
 	        </nav>
          
@@ -258,37 +269,37 @@
 	            const chungbuk = ["제천시","청주시","충주시","괴산군","단양군","보은군","영동군","옥천군","음성군","증평군","진천군","청원군"];
 	                
 	
-	            if (e.value == "general01") {
+	            if (e.value == "강원도") {
 	                add = gangwon;
-	            } else if (e.value == "general02") {
+	            } else if (e.value == "경기도") {
 	                add = gyeonggi;
-	            } else if (e.value == "general03") {
+	            } else if (e.value == "경상남도") {
 	                add = gyeongsangnam;
-	            } else if (e.value == "general04") {
+	            } else if (e.value == "경상북도") {
 	                add = gyeongsangbuk;
-	            } else if (e.value == "general05") {
+	            } else if (e.value == "광주광역시") {
 	                add = gwangju;
-	            } else if (e.value == "general06") {
+	            } else if (e.value == "대구광역시") {
 	                add = daegu;
-	            } else if (e.value == "general07") {
+	            } else if (e.value == "대전광역시") {
 	                add = daejeon;
-	            } else if (e.value == "general08") {
+	            } else if (e.value == "부산광역시") {
 	                add = busan;
-	            } else if (e.value == "general09") {
+	            } else if (e.value == "서울특별시") {
 	                add = seoul;
-	            } else if (e.value == "general10") {
+	            } else if (e.value == "울산광역시") {
 	                add = ulsan;
-	            } else if (e.value == "general11") {
+	            } else if (e.value == "인천광역시") {
 	                add = incheon;
-	            } else if (e.value == "general12") {
+	            } else if (e.value == "전라남도") {
 	                add = jeonnam;
-	            } else if (e.value == "general13") {
+	            } else if (e.value == "전라북도") {
 	                add = jeonbuk;
-	            } else if (e.value == "general14") {
+	            } else if (e.value == "제주도") {
 	                add = jeju;
-	            } else if (e.value == "general15") {
+	            } else if (e.value == "충청남도") {
 	                add = chungnam;
-	            } else if (e.value == "general16") {
+	            } else if (e.value == "충청북도") {
 	                add = chungbuk;
 	            }
 	

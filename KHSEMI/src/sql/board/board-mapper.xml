@@ -5,11 +5,31 @@
 	<entry key="selectListCount">
 		SELECT COUNT(*) AS COUNT
 		FROM BOARD
-		WHRER (BOARD_TYPE = 1) AND STATUS="Y"
+		WHERE (BOARD_TYPE = 1) AND STATUS='Y'
 	</entry>
 	
-	
 	<entry key="selectMateList">
+		SELECT *
+		FROM(	
+			SELECT ROWNUM RNUM, A.*
+			FROM 
+				(SELECT  BOARD_NO,
+						BOARD_TITLE,
+						BOARD_CONTENT,
+						USER_NICKNAME,
+						B.ADDRESS,
+						B.CREATE_DATE,
+                        COUNT
+				FROM BOARD B
+				JOIN MEMBER ON (BOARD_WRITER = USER_NO)
+				WHERE BOARD_TYPE=1 AND B.STATUS='Y'
+				ORDER BY CREATE_DATE DESC
+				) A
+			)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+<!-- 	<entry key="selectMateList">
 		SELECT BOARD_NO,
 			   BOARD_TITLE, 
 			   BOARD_CONTENT,
@@ -20,11 +40,11 @@
 		FROM BOARD B
 		JOIN MEMBER M ON(BOARD_WRITER = USER_NO)
 		WHERE BOARD_TYPE = 1 AND B.STATUS='Y'
-	</entry>
+	</entry> -->
 	
 	<entry key="insertMateBoard">
-			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER)
-			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,2)
+			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER, ADDRESS)
+			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,2,?)
 	</entry>
 	
 </properties>

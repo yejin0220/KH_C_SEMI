@@ -1,6 +1,6 @@
 package com.kh.mateboard.model.dao;
 
-import java.io.FileInputStream;  
+import java.io.FileInputStream;   
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import com.kh.common.model.PageInfo;
 import com.kh.mateboard.model.vo.Board;
 
 import static com.kh.common.JDBCTemplate.close;
-
+ 
 public class mateBoardDao {
 	
 	private Properties prop = new Properties();
@@ -65,7 +66,7 @@ public class mateBoardDao {
 		
 	}
 	
-	public ArrayList<Board> selectMateList(Connection conn){
+	public ArrayList<Board> selectMateList(Connection conn, PageInfo pi){
 		
 		ArrayList<Board> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
@@ -75,6 +76,12 @@ public class mateBoardDao {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
+			
+			int startRow = (pi.getCurrentPage() -1) * pi.getBoardLimit()+1;
+			int endRow = startRow+pi.getBoardLimit()-1;
+			
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
 					
 			rset = pstmt.executeQuery();
 			
@@ -96,6 +103,7 @@ public class mateBoardDao {
 			close(rset);
 			close(pstmt);
 		}
+		
 		return list;
 		
 	}
@@ -112,6 +120,7 @@ public class mateBoardDao {
 			
 			pstmt.setString(1, b.getBoardTitle());
 			pstmt.setString(2, b.getBoardContent());
+			pstmt.setString(3, b.getAddress());
 			
 			result = pstmt.executeUpdate();
 			

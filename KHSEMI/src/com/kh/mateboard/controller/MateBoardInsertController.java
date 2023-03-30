@@ -89,8 +89,6 @@ public class MateBoardInsertController extends HttpServlet {
 		}
 		
 		
-		
-		
 	
 	
 	

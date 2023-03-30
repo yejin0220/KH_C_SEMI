@@ -1,4 +1,4 @@
-package com.kh.common.model.vo;
+package com.kh.common.model;
 
 public class PageInfo {
 
