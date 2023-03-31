@@ -12,6 +12,7 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 import com.kh.common.model.PageInfo;
+import com.kh.mateboard.model.vo.Attachment;
 import com.kh.mateboard.model.vo.Board;
 
 import static com.kh.common.JDBCTemplate.close;
@@ -132,7 +133,26 @@ public class mateBoardDao {
 		return result;
 	}
 	
-	
+	public int insertAttachmentMate(Connection conn, Attachment at) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("insertAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+	}
 	
 	
 }

@@ -7,6 +7,7 @@ import static com.kh.common.JDBCTemplate.*;
 
 import com.kh.common.model.PageInfo;
 import com.kh.mateboard.model.dao.mateBoardDao;
+import com.kh.mateboard.model.vo.Attachment;
 import com.kh.mateboard.model.vo.Board;
 
 public class mateBoardService {
@@ -33,18 +34,23 @@ public class mateBoardService {
 		return list;
 	}
 	
-	public int insertMateBoard(Board b) {
+	public int insertMateBoard(Board b, Attachment at) {
 		Connection conn = getConnection();
 		
-		int result = new mateBoardDao().insertMateBoard(conn, b);
+		int result1 = new mateBoardDao().insertMateBoard(conn, b);
 		
-		if(result>0) {
+		int result2 = 1;
+		
+		if(at != null) {
+			result2 = new mateBoardDao().insertAttachmentmate(conn, at);
+		}
+		
+		if(result1>0 && result2>0) {
 			commit(conn);
 		}else {
 			rollback(conn);
 		}
-		return result;
-		
+		return result1*result2;
 		
 		
 		

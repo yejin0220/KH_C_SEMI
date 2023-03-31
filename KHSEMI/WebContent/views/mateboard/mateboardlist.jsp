@@ -5,9 +5,12 @@
    	String contextPath = request.getContextPath();
    	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
-	//Board b = (Board)request.getAttribute("b");
 	
 	
+	/* int index = address.indexOf(",");
+	String address1 = address.substring(0, index);
+	String address2 = address.substring(index+1); */
+
  	int currentPage = pi.getCurrentPage();
 	int startPage = pi.getStartPage();
 	int endPage = pi.getEndPage();
@@ -113,7 +116,7 @@
 			                    <span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
 			                    <hr>
 			                    <div class="card-content">
-			                          	<p>	<%=%></p>
+			                          	<p>	<%= b.getAddress() %></p>
 			                          	<p> <%=b.getBoardContent() %></p>
 			                    </div>
 			                    <div class="card-footer">

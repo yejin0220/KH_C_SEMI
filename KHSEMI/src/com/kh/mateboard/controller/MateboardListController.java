@@ -59,6 +59,7 @@ public class MateboardListController extends HttpServlet {
 		
 		PageInfo pi = new PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
 		ArrayList<Board> list = new mateBoardService().selectMateList(pi);
+
 		
 		request.setAttribute("pi", pi);
 		request.setAttribute("list", list);
