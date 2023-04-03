@@ -7,6 +7,7 @@
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
 	
 	
+	
 	/* int index = address.indexOf(",");
 	String address1 = address.substring(0, index);
 	String address2 = address.substring(index+1); */
@@ -67,7 +68,7 @@
      <div class="content3">
             <form action="" method="get" class="location">
                 <div class="search_box">
-                    <select name="search1" id="" onchange="categoryChange(this)" class="search1">
+                    <select name="address1" id="" onchange="categoryChange(this)" class="address1">
                       <option value>광역시/도 선택</option>
                       <option value="강원도">강원도</option>
                       <option value="경기도">경기도</option>
@@ -88,7 +89,7 @@
                     </select>
                 </div>
                 <div class="search_box">
-                    <select name="search2" id="state" class="search2">
+                    <select name="address2" id="state" class="address2">
                         <option>군/구 선택</option>
                     </select>
                 </div>
@@ -102,7 +103,7 @@
 		<div class="content4"></div>
 		
 		<div class="conten5">
-		<div class="list">
+			<div class="list">
 				<%if(list.isEmpty()){ %>
 					<p>등록된 게시글이 없습니다..</p>
 				<%}else{ %>
@@ -133,63 +134,21 @@
 				<%} %>
 				</div>
 			</div>
-          <%--   <div class="profile">
-
-                <div class="card">
-                    <div class="card-body">
-                    <img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">   
-                    <span class="card-title">또오개냥</span> 
-                    <span class="card-subtitle mb-2 text-muted">함께 산책할 친구를 구합니다</span>
-                    <hr>
-                    <div class="card-content">
-                            <p> 산책로 지역 : </p>
-                            <p> 반려견 정보 : </p>
-                            <p> 유의사항 : </p>
-                    </div>
-                    <div class="card-footer">
-                            <img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png"><span class="thumb-number">추천수</span>
-                            <img class="card-heart" src="<%=contextPath %>/resources//빈하트.png"><span class="heart-number">참여자수</span>
-                    </div>               
-                    </div>
-                </div>
-
-                <div class="card" >
-                    <div class="card-body">
-                    <img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">   
-                    <span class="card-title">또오개냥</span> 
-                    <span class="card-subtitle mb-2 text-muted">함께 산책할 친구를 구합니다</span>
-                    <hr>
-                    <div class="card-content">
-                            <p> 산책로 지역 : </p>
-                            <p> 반려견 정보 : </p>
-                            <p> 유의사항 : </p>
-                    </div>
-                    <div class="card-footer">
-                            <img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png"><span class="thumb-number">추천수</span>
-                            <img class="card-heart" src="<%=contextPath %>/resources/빈하트.png"><span class="heart-number">참여자수</span>
-                    </div>               
-                    </div>
-                </div>
-
-                <div class="card" >
-                    <div class="card-body">
-                        <img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">   
-                        <span class="card-title">또오개냥</span> 
-                        <span class="card-subtitle mb-2 text-muted">함께 산책할 친구를 구합니다</span>
-                        <hr>
-                        <div class="card-content">
-                                <p> 산책로 지역 : </p>
-                                <p> 반려견 정보 : </p>
-                                <p> 유의사항 : </p>
-                        </div>
-                        <div class="card-footer">
-                                <img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png"><span class="thumb-number">추천수</span>
-                                <img class="card-heart" src="<%=contextPath %>/resources/빈하트.png"><span class="heart-number">참여자수</span>
-                        </div>               
-                    </div>
-                </div>
-            </div>
-             --%>
+			
+			<script>
+				$(function(){
+					$(".card").click(function(){
+						
+						console.log(this);
+						
+						let bno = $(this).text();
+						
+						location.href='<%=contextPath%>/detail.mate?bno'+=bno;
+						
+					})
+				})
+			</script>
+         
              <!-- 페이징바 영역 -->
 	         <nav aria-label="Page navigation example">
 	            <ul class="pagination">

@@ -47,9 +47,35 @@
 			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,2,?)
 	</entry>
 	
-	<entry key="insertAttchment">
+	<entry key="insertAttachment">
 		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH)
 		VALUES(SEQ_FNO.NEXTVAL, SEQ_BNO.CURRVAL, ?,?,?)
 	</entry>
+	<entry key="increaseCount">
+		UPDATE BOARD
+		SET COUNT +1
+		WHERE BOARD_NO = ? AND STATUS='Y' 
+	</entry>
 	
+	<entry key="selectBoard">
+		SELECT BOARD_NO,
+			   ADDRESS,
+			   BOARD_TITLE,
+			   USER_NICKNAME,
+			   CREATEDATE,
+			   BOARD_CONTENT
+		FROM BOARD B
+		JOIN MEMBER M  ON(BOARD_WRITER = USER_NO)
+		WHERE BOARD_NO = ? AND B.STATUS = 'Y'
+		
+	</entry>
+	
+	<entry key="selectAttachment">
+		SELECT FILE_NO,
+			   ORIGIN_NAME,
+			   CHANGE_NAME,
+			   FILE_PATH
+		FROM ATTACHMENT
+		WHERE REF_BNO = ? AND STATUS='Y'
+	</entry>
 </properties>

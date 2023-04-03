@@ -1,6 +1,6 @@
 package com.kh.mateboard.model.dao;
 
-import java.io.FileInputStream;   
+import java.io.FileInputStream;    
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 import com.kh.common.model.PageInfo;
-import com.kh.mateboard.model.vo.Attachment;
+import com.kh.common.model.Attachment;
 import com.kh.mateboard.model.vo.Board;
 
 import static com.kh.common.JDBCTemplate.close;
@@ -133,7 +133,8 @@ public class mateBoardDao {
 		return result;
 	}
 	
-	public int insertAttachmentMate(Connection conn, Attachment at) {
+	public int insertAttachment(Connection conn, ArrayList<Attachment> list) {
+		
 		
 		int result = 0;
 		
@@ -142,17 +143,114 @@ public class mateBoardDao {
 		String sql = prop.getProperty("insertAttachment");
 		
 		try {
+		
 			pstmt = conn.prepareStatement(sql);
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
+			for(Attachment at : list) {
+				pstmt.setString(1, at.getOriginName());
+				pstmt.setString(2, at.getChangeName());
+				pstmt.setString(3, at.getFilePath());
+			}
+			
+			
+		
+			
+			result= pstmt.executeUpdate();
+			
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}finally {
+			close(pstmt);
 		}
-		
-		
-		
+		return result;
 		
 		
 	}
 	
+	public int increaseCount(Connection conn, int boardNo) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("increaseCount");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}return result;
+		
+		
+	}
+	
+	
+	public Board selectBoard(Connection conn, int boardNo) {
+		Board b = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				b = new Board();
+				b.setAddress(rset.getString("ADDRESS"));
+						b.setBoardTitle(rset.getString("BOARD_TITLE"));
+						b.setBoardWriter(rset.getString("USER_NICKNAME"));
+						b.setCreateDate( rset.getDate("CREATE_DATE"));	
+						b.setBoardContent( rset.getString("BOARD_CONTENT"));	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return b;
+	}
+	
+	public Attachment selectAttachment(Connection conn, int boardNo) {
+		Attachment at = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectAttachment");
+		
+		try {
+			pstmt =conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				at = new Attachment();
+				at.setFileNo(rset.getInt("FILE_NO"));
+				at.setOriginName(rset.getString("ORIGIN_NAME"));
+				at.setChangeName(rset.getString("CHANGE_NAME"));
+				at.setFilePath(rset.getString("FILE_PATH"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return at;
+		
+		
+	}
 	
 }

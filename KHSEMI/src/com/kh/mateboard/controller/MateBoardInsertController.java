@@ -1,6 +1,9 @@
 package com.kh.mateboard.controller;
 
 import java.io.IOException; 
+import java.util.ArrayList;
+import java.util.Enumeration;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import com.kh.common.model.MyFileRenamePolicy;
-import com.kh.mateboard.model.vo.Attachment;
+import com.kh.common.model.Attachment;
 import com.kh.mateboard.model.service.mateBoardService;
 import com.kh.mateboard.model.vo.Board;
 import com.oreilly.servlet.MultipartRequest;
@@ -63,24 +66,31 @@ public class MateBoardInsertController extends HttpServlet {
 			MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8", new MyFileRenamePolicy());
 			
 			
-			//4)db에 넘길 데이터 저장하기			
-			String title = request.getParameter("title");
-			String content = request.getParameter("content");
-			String address = request.getParameter("address1")+","+request.getParameter("address2");
+			//4)db에 넘길 데이터 저장하기	
+			String title = multi.getParameter("title");
+			String content = multi.getParameter("content");
+			String address = multi.getParameter("address1")+","+multi.getParameter("address2");
 			
 			Board b = new Board(title, content, address);
 			
-			Attachment at = null;
+			ArrayList<Attachment> list = new ArrayList();
 			
-			if(multi.getOriginalFileName("upfile") != null) {
-				at = new Attachment();
-				at.setOriginName(multi.getOriginalFileName("upfile"));
-				at.setChangeName(multi.getFilesystemName("upfile"));
-				at.setFilePath("resources/board_upfiles/");
-			}
+				
+				if(multi.getOriginalFileName("upfile") != null) {
+					Attachment at = new Attachment();
+					at.setOriginName(multi.getOriginalFileName("upfile"));
+					at.setChangeName(multi.getFilesystemName("upfile"));
+					at.setFilePath("resources/board_upfiles/");
+					
+					list.add(at);
+				}
+				
+				
+		
 			
-			int result = new mateBoardService().insertMateBoard(b, at);
+		
 			
+			int result = new mateBoardService().insertMateBoard(b, list);
 			
 			
 			HttpSession session = request.getSession();
@@ -93,8 +103,8 @@ public class MateBoardInsertController extends HttpServlet {
 				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 			}
 			
-			
-			
+			System.out.println(b);
+			System.out.println(list);
 			
 	}
 		

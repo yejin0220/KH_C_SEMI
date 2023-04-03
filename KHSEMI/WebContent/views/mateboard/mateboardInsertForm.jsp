@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <title>산책메이트 게시판 글쓰기</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<link href="resources/css/02_mateWrite.css?afterlike" rel="stylesheet">
+<link href="resources/css/02_mateWrite.css?after" rel="stylesheet">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ae890d646304659e5b68c9a99be204bf"></script>
 <style>
 
@@ -38,7 +38,7 @@
       <br><br>
 
       <div class="walk-content3">
-        <form action="<%=contextPath %>/insert.mate" method="post" ">
+        <form action="<%=contextPath %>/insert.mate" method="post" enctype="multipart/form-data">
           <div class="walk-write">
             <div class="walk-name">
               <div class="search_box">
@@ -74,7 +74,8 @@
 
             <img src="<%=contextPath %>/resources/메이트소개글쓰기.png" height="65">
             <div class="write-content">
-              <textarea class="walk" style="resize:none;" name="content"></textarea>
+              <div class="write-info"><span> 한 줄 소개글 : </span> <input type="text" placeholder="산책메이트를 위한 한 줄 소개글을 입력해주세요" size="140"></div>
+              <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content"></textarea>
             </div>
 
             <img src="<%=contextPath %>/resources/메이트 위치 정하기.png" height="68">
@@ -83,34 +84,17 @@
             </div>
 
             <img src="<%=contextPath %>/resources/사진첨부하기.png" height="70">
-            <div id="walk-picture">
+           	
+            <div id="container">
               <div class="prev btn-pic"></div>
-              <div class="items">
+                <div class="items">
                   <div class="item active">
-                      <div class="picture"></div>
-                      <div class="picture"></div>
-                      <div class="picture"></div>
+                    <div class="picture"></div>
                   </div>
-                  <div class="item">
-                      <div class="picture"></div>
-                      <div class="picture"></div>
-                      <div class="picture"></div>
-                  </div>
-                  <div class="item">THREE</div>
-                  <div class="item">FOUR</div>
-                  <div class="item">FIVE</div>
-              </div>
-              <div class="stepper">
-                  <div class="step active-step"></div>
-                  <div class="step"></div>
-                  <div class="step"></div>
-                  <div class="step"></div>
-                  <div class="step"></div>
-              </div>
-              <div class="next btn-pic"></div>
-          </div>
-                <input type="file" id="file" name="file" required">
-          		<label for="file" style="font-size: 13px;">파일선택</label>
+                </div>
+               <div class="next btn-pic"></div>
+            </div>
+            <input type="file" id="image" accept="image/*" onchange="setThumbnail(event);" name="upfile" multiple/>
             <br>
             <div class="block" style="height: 10px;"></div>
             
@@ -227,62 +211,24 @@
             $("#longitude").val(latlng.getLng());
     	});
     </script>
-    <script>
-    	
-    		
-      		function loadImg(inputFile, num){
-      			//inputFile : 현재 변화가 생긴 input type="file"요소
-      			//num : 몇 번재 input 요소인지 확인 후 해당 영역에 미리보기 하기 위한 변수
-      			
-      			console.log(inputFile.files.length);
-	      		/*
-	      			파일 선택시 length = 1, 파일 선택 취소시 배열안의 내용이 비어있게 됨
-	      			length 값을 가지고 파일의 존재 유뮤를 알 수가 있다.
-	      			
-	      			files속성은 업로드 된 파일의 정보들을 "배열" 형식으로 여러개 묶어서 반환, length그 배열의 크기를 의미
-	      		*/
-      			
-	      		if(inputFile.files.length != 0){
-	      			//선택된 파일이 존재할 경우에 선택된 파일들을 읽어들여서 그 영역에 맞는 곳에 미리 보기를 추가
-	      			
-	      			//파일을 읽어들일 FileReader객체 생성
-	      			let reader = new FileReader();
-	      			
-	      			//파일을 읽어들이는 메소드 -> 어느 파일을 읽을지 매개변수에 제시해줘야 함
-	      			//0번째 인덱스에 담긴 파일 정보를 제시
-	      			//-> 해당 파일을 읽어들이는 순간 해당 파일만의 고유한 url이 부여됨.
-	      			//-> 해당 url을 src 속성값으로 제시
-
-	      			reader.readAsDataURL(inputFile.files[0]);
-	      			
-	      			//파일 읽기가 완료되었을때 실행할 함수 정의
-	      			reader.onload = function(e){ //e.target.result에 고유한 url부여됨.
-	      				
-	      				//각 영역에 맞워서 이미지 미리보기 제시
-	      				let url = e.target.result;
-	      				
-	      				switch(num){
-	      				case 1 : $(".picture").attr("src", url); break;
-	      				case 2 : $(".picture").attr("src", url); break;
-	      				case 3 : $(",picture").attr("src", url); break;
-	      				}
-	      				
-	      			}
-	      		}/* else{
-	      			//선택된 파일이 없을 경우,미리 보기도 함께 사라지게끔 작업
-		      			switch(num){
-	      				case 1 : $("#contentImg1").removeAttr("src"); break;
-	      				case 2 : $("#contentImg2").removeAttr("src"); break;
-	      				case 3 : $("#contentImg3").removeAttr("src"); break;
-	      				} */
-	      		}
-      			
-      		}
-      	
     
-    	
-    	
-    </script>
+	<script type="text/javascript">
+	     function setThumbnail(event) {
+	       for (var image of event.target.files) {
+	         var reader = new FileReader();
+	         
+	         reader.onload = function(event) {
+	           var img = document.createElement("img");
+	           img.setAttribute("src", event.target.result);
+	           document.querySelector("div.picture").appendChild(img);
+	         };
+	
+	         console.log(image);
+	         reader.readAsDataURL(image);
+	       }
+	       
+	     }
+	</script>
   
 </body>
 </html>
