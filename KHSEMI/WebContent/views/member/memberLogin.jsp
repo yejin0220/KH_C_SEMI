@@ -4,6 +4,7 @@
 <%
 	String contextPath = request.getContextPath();
 	Member loginUser = (Member) request.getAttribute("loginUser");
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <title>로그인 페이지</title>
 <style>
      * {
@@ -34,7 +36,7 @@
             height: 200px;
             position: absolute;
             bottom: 348px;
-            left: 700px;
+            left: 649px;
         }
 
         .login-wrapper {
@@ -42,7 +44,7 @@
             height: 350px;
             padding: 60px;
             box-sizing: border-box;
-            margin-left: 600px;
+            margin-left: 550px;
             margin-top: 200px;
         }
 
@@ -127,6 +129,11 @@
         .login_footer{
             display: inline-flex;
         }
+        
+        input:focus {
+            outline: none;
+        }
+
 </style>
 </head>
 <body>
@@ -136,35 +143,70 @@
             <div class="login-wrapper">
                 <h2>로그인</h2>
                 <form method="post" action="<%= contextPath %>/login.me" id="login-form">
-                    <input type="text" name="userId" placeholder="아이디" required>
-                    <input type="password" name="userPwd" placeholder="비밀번호" required>
+                    <input type="text" name="userId" placeholder="아이디" autocomplete="off" required>
+                    <input type="password" name="userPwd" placeholder="비밀번호" autocomplete="off" required>
                     <label for="remember-check">
-                        <input type="checkbox" id="remember-check"> 아이디 저장
+                        <input type="checkbox" id="remember-check" > 아이디 저장
                     </label>
-                    <input type="submit" value="로그인">
-
-                    <!-- naver button -->
-                    <button class="naver__btn">
-                        <img src="<%=contextPath %>/resources/네이버 로그인.png" alt="" width="380" height="50">
-                    </button>
-                    <br>
-                    <!-- kakao button -->
-                    <button class="kakao__btn">
-                        <img src="<%=contextPath %>/resources/kakao_login_large_wide.png" alt="" width="380" height="50">
-                    </button>
-                </form>
+                    <input type="submit" onclick="submitLogin();" value="로그인" >
 
                 <div class="separator"></div>
+                
                 <div class="login_footer">
+                
                     <div class="id_search">
                         <a href="">아이디 찾기</a>
                         <span>ㅣ</span>
                         <a href="">비밀번호 찾기</a>
                     </div>
+                    
                     <div class="sign_btn" align="end">
-                        <button type="submit" disabled;>회원가입</button>
+                        <button type="button" onclick="enrollPage();">회원가입</button>
+                </form>
                     </div>
                 </div>
+                <script>
+         function enrollPage(){
+            location.href = "<%= contextPath%>/views/member/memberEnroll.jsp"; 
+         }
+         function submitLogin(){
+            
+            let userId = $("#login-form input[name=userId]").val();
+            
+            if($("#remember-check").is(":checked") ) {
+             document.cookie = "remember-check="+userId+"; path=/; max-age="+60*60*24;     
+            }else{
+               document.cookie = "remember-check=; path=/; max-age=0;"
+            }
+            
+            
+            $("#login-form").submit();
+            
+         }
+         
+         function getCookie(){
+            let value = "";
+            if(document.cookie.length > 0){
+               let index = document.cookie.indexOf("remember-check=");
+               if(index != -1){ 
+                  index += "remember-check=".length;
+                  let end = document.cookie.indexOf(";",index);
+                  
+                  if(end == -1){
+                     value = document.cookie.substring(index);
+                  }else{
+                     value = document.cookie.substring(index,end );
+                  }
+                  $("#login-form input[name=userId]").val(value);
+                  $("#remember-check").attr("checked",true);
+               }
+               
+            }
+         }
+         $(function(){
+            getCookie();
+         });
+      </script>
             </div>
         </div>
     </div>

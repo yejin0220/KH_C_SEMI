@@ -70,8 +70,9 @@ public class MateBoardInsertController extends HttpServlet {
 			String title = multi.getParameter("title");
 			String content = multi.getParameter("content");
 			String address = multi.getParameter("address1")+","+multi.getParameter("address2");
+			String userNo = multi.getParameter("userNo");
 			
-			Board b = new Board(title, content, address);
+			Board b = new Board(title, content, address, userNo);
 			
 			ArrayList<Attachment> list = new ArrayList();
 			
@@ -85,11 +86,6 @@ public class MateBoardInsertController extends HttpServlet {
 					list.add(at);
 				}
 				
-				
-		
-			
-		
-			
 			int result = new mateBoardService().insertMateBoard(b, list);
 			
 			
@@ -103,8 +99,7 @@ public class MateBoardInsertController extends HttpServlet {
 				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 			}
 			
-			System.out.println(b);
-			System.out.println(list);
+			
 			
 	}
 		

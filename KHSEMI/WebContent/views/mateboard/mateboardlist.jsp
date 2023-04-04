@@ -1,10 +1,11 @@
-<%@ page import="java.util.ArrayList, com.kh.mateboard.model.vo.Board, com.kh.common.model.PageInfo" %>
+<%@ page import="java.util.ArrayList, com.kh.mateboard.model.vo.Board, com.kh.common.model.PageInfo, com.kh.member.model.vo.Member" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
    	String contextPath = request.getContextPath();
    	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
+	
 	
 	
 	
@@ -25,7 +26,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<link href="<%=contextPath%>/resources/css/01.css" rel="stylesheet">
+<link href="<%=contextPath%>/resources/css/01.css?after" rel="stylesheet">
 <style>
 .boardNo, .count, .create-date{
 	display: none;
@@ -97,7 +98,10 @@
                 <button type="submit" id="search-btn">검색</button>
             </form>
             <div class="content3-block" style="width:3%;"></div>
-           <button type="button" id="mate_write"><a href="<%=contextPath%>/insert.mate">게시판 글쓰기</a></button>
+            
+           
+          		 <button type="button" id="mate_write"><a href="<%=contextPath%>/insert.mate">게시판 글쓰기</a></button>
+          	
         </div>
 		
 		<div class="content4"></div>
@@ -110,22 +114,22 @@
 					
 					<% for(Board b : list){%>
 		                <div class="card" id="card">
-		                		<span class="boardNo" style="font-size: x-small;"><%=b.getBoardNo() %></span>
-			                    <div class="card-body">
-			                    <img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">   
-			                    <span class="card-title"><%=b.getBoardWriter() %></span> 
-			                    <span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
-			                    <hr>
-			                    <div class="card-content">
-			                          	<p>	<%= b.getAddress() %></p>
-			                          	<p> <%=b.getBoardContent() %></p>
-			                    </div>
-			                    <div class="card-footer">
-			                            <img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png"><span class="thumb-number">추천수</span>
-			                            <img class="card-heart" src="<%=contextPath %>/resources/빈하트.png"><span class="heart-number">참여자수</span>
-			                    </div>
-			                     <span class="count" style="font-size: small;"><%=b.getCount() %></span>
-			                     <span class="create-date" style="font-size: small;"><%=b.getCreateDate() %></span>               
+		                	<span class="boardNo" style="font-size: x-small;"><%=b.getBoardNo() %></span>
+			                <div class="card-body">
+				                    <img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">   
+				                    <span class="card-title"><%=b.getBoardWriter() %></span> 
+				                    <span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
+				                    <hr>
+				                    <div class="card-content">
+				                          	<p>	<%= b.getAddress() %></p>
+				                          	<p> <%=b.getBoardContent() %></p>
+				                    </div>
+				                    <div class="card-footer">
+				                            <img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png"><span class="thumb-number">추천수</span>
+				                            <img class="card-heart" src="<%=contextPath %>/resources/빈하트.png"><span class="heart-number">참여자수</span>
+				                    </div>
+				                     <span class="count" style="font-size: small;"><%=b.getCount() %></span>
+				                     <span class="create-date" style="font-size: small;"><%=b.getCreateDate() %></span>               
 		                    </div>
 		                </div>
 					
@@ -135,15 +139,16 @@
 				</div>
 			</div>
 			
-			<script>
+			        
+	        <script>
 				$(function(){
 					$(".card").click(function(){
 						
-						console.log(this);
+						//alert("클릭");
 						
-						let bno = $(this).text();
+						let bno = $(this).children().eq(0).text();
 						
-						location.href='<%=contextPath%>/detail.mate?bno'+=bno;
+						location.href='<%=contextPath%>/detail.mate?bno='+bno;
 						
 					})
 				})
@@ -175,13 +180,14 @@
 	             
 	             <%if(currentPage != maxPage){ %>
 		              <li class="page-item">
-		                <a class="page-link" href="#" aria-label="Next">
+		                <a class="page-link" href="<%=contextPath %>/list.mate?currentPage=<%=currentPage+1 %>" aria-label="Next">
 		                  <span aria-hidden="true">&raquo;</span>
 		                </a>
 		              </li>
 	              <%} %>
 	            </ul>
 	        </nav>
+	
          
         
         <script>
@@ -278,7 +284,7 @@
 
         
         </script>
-        
+
 	
 	
 	

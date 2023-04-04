@@ -114,6 +114,7 @@ public class mateBoardDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
+		
 		String sql = prop.getProperty("insertMateBoard");
 		
 		try {
@@ -121,7 +122,8 @@ public class mateBoardDao {
 			
 			pstmt.setString(1, b.getBoardTitle());
 			pstmt.setString(2, b.getBoardContent());
-			pstmt.setString(3, b.getAddress());
+			pstmt.setInt(3, Integer.parseInt(b.getBoardWriter()));
+			pstmt.setString(4, b.getAddress());
 			
 			result = pstmt.executeUpdate();
 			
@@ -130,13 +132,14 @@ public class mateBoardDao {
 		}finally {
 			close(pstmt);
 		}
+		System.out.println(result);
 		return result;
 	}
 	
 	public int insertAttachment(Connection conn, ArrayList<Attachment> list) {
 		
 		
-		int result = 0;
+		int result = 1;
 		
 		PreparedStatement pstmt = null;
 		
@@ -153,15 +156,17 @@ public class mateBoardDao {
 			}
 			
 			
+			result *= pstmt.executeUpdate();
 		
 			
-			result= pstmt.executeUpdate();
 			
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}finally {
 			close(pstmt);
 		}
+		
+		System.out.println(result);
 		return result;
 		
 		
@@ -206,12 +211,13 @@ public class mateBoardDao {
 			rset = pstmt.executeQuery();
 			
 			if(rset.next()) {
-				b = new Board();
-				b.setAddress(rset.getString("ADDRESS"));
-						b.setBoardTitle(rset.getString("BOARD_TITLE"));
-						b.setBoardWriter(rset.getString("USER_NICKNAME"));
-						b.setCreateDate( rset.getDate("CREATE_DATE"));	
-						b.setBoardContent( rset.getString("BOARD_CONTENT"));	
+				b = new Board(rset.getInt("BOARD_NO"),
+							  rset.getString("BOARD_TITLE"),
+							  rset.getString("BOARD_CONTENT"),
+							  rset.getString("USER_NICKNAME"),
+							  rset.getDate("CREATE_DATE"),
+							  rset.getString("ADDRESS"));
+					
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

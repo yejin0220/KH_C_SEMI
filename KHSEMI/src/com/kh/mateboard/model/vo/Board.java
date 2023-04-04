@@ -19,6 +19,8 @@ public class Board {
 	private String status; //	STATUS
 	private String pet; // 반려견 정보
 	
+	
+	
 	public Board() {
 		super();
 	}
@@ -102,10 +104,23 @@ public class Board {
 	}
 	
 
-	public Board(String boardTitle, String boardContent, String address) {
+	public Board(String boardTitle, String boardContent, String address, String boardWriter) {
 		super();
 		this.boardTitle = boardTitle;
 		this.boardContent = boardContent;
+		this.address = address;
+		this.boardWriter=boardWriter;
+	}
+	
+	
+
+	public Board(int boardNo,String boardTitle, String boardContent, String boardWriter, Date createDate, String address) {
+		super();
+		this.boardNo = boardNo;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.boardWriter = boardWriter;
+		this.createDate = createDate;
 		this.address = address;
 	}
 

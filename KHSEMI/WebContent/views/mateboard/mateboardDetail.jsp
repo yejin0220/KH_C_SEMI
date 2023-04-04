@@ -1,21 +1,32 @@
+<%@ page import="com.kh.mateboard.model.vo.Board, com.kh.common.model.Attachment" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	Board b = (Board)request.getAttribute("b");
+	Attachment at = (Attachment)request.getAttribute("at");
+
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link href="resources/css/03_mate_datail.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<link href="resources/css/03_mateDetail.css?after" rel="stylesheet">
 </head>
+
 <body>
 
 
-<div class="wrap">
+	<div class="wrap">
         <div class="content1">
             <div class="content_name">
-            <img src="resources/img/왼쪽강아지.png" style="width: 40px; height: 35px;">
+            <img src="resources/왼쪽강아지.png" style="width: 40px; height: 35px;">
             <h1>&nbsp;같이 걷개&nbsp;</h1>
-            <img src="resources/img/오른쪽강아지.png" style="width:40px; height:40px;">
+            <img src="resources/오른쪽강아지.png" style="width:40px; height:40px;">
             </div>
         </div>
         
@@ -31,51 +42,62 @@
 
         <div class="walk-content3">
             
-            <div class="walk-write">
-                <div class="walk-name">
-                  <span>선택지역</span>
-                  <span>선택지역</span>
-                  <span>게시글 제목</span><br>
-                  <span>작성자</span>
-                  <span>작성날짜</span>
-                </div>
-                
-                <hr>
-    
-                <img src="resources/img/소개글보기-.png" height="60">
-                <div class="write-content">
-    
-                </div>
-    
-                <img src="resources/img/메이트만날장소-.png" height="63">
-                <div id="map">
-    
-                </div>
-    
-                <img src="resources/img/사진구경하기-.png" height="60">
-                
-                <div id="walk-picture">
-                    <div id="container">
-                        <div class="prev btn-pic"></div>
-                          <div class="items">
-                            <div class="item active">
-                              <div class="picture"></div>
-                            </div>
-                          </div>
-                          <div class="next btn-pic"></div>
-                      </div>
-                </div>
-                
-                
-            <br>
-             
-        </div>
+            
+	            <div class="walk-write">
+	            	
+	                <div class="walk-name1">
+	                  <span class="address">[<%=b.getAddress() %>]</span>
+	                  <span class="title"><%=b.getBoardTitle() %></span>
+	                </div>
+	                <hr>
+	                <div class="walk-name2">
+	                  <span class="writer"><%=b.getBoardWriter() %></span>
+	                  <span class="createDate"><%=b.getCreateDate() %></span>
+	                </div>
+	                
+	                <hr>
+	    
+	                <img src="resources/소개글보기-.png" height="60">
+	                <div class="write-content">
+	    				<textarea  cols="166" rows="13" style="resize:none;" name="content" class="content"><%=b.getBoardContent() %></textarea>
+	                </div>
+	    
+	                <img src="resources/메이트만날장소-.png" height="63">
+	                <div id="map">
+	    
+	                </div>
+	    
+	                <img src="resources/사진구경하기-.png" height="60">
+	                
+	                <div id="walk-picture">
+	                    <div id="container">
+	                        <div class="prev btn-pic"></div>
+	                          <div class="items">
+	                            <div class="item active">
+	                              <div class="picture">
+	                              	<%if(at == null){ %>
+	                              		<p>아직 활동사진이 등록되지 않았습니당</p>
+	                              	<%}else { %>
+	                              		<img src="<%=request.getContextPath()%>/<%=at.getFilePath()+at.getChangeName()%>">
+	                              	<%} %>
+	                              </div>
+	                            </div>
+	                          </div>
+	                          <div class="next btn-pic"></div>
+	                      </div>
+	                </div>
+	                
+	                
+	            <br>
+	             
+	        </div>
         
-        <div class="btn-div">
-            <button class="apply">신청하기</button>
-            <button type="reset">취소하기</button>
-        </div>
+	        <div class="btn-div">
+	            <button class="apply">신청하기</button>
+	            <button type="reset">취소하기</button>
+	        </div>
 
+    	</div>
     </div>
 
 </body>

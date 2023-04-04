@@ -33,6 +33,7 @@ public class MateBoardDetailController extends HttpServlet {
 
 		int boardNo = Integer.parseInt(request.getParameter("bno"));
 		
+		
 		//조회수 증가
 		int result = new mateBoardService().increaseCount(boardNo);
 		
@@ -45,7 +46,7 @@ public class MateBoardDetailController extends HttpServlet {
 			
 			request.getRequestDispatcher("views/mateboard/mateboardDetail.jsp").forward(request, response);
 			
-			
+		
 		}else {
 			request.setAttribute("errorMsg", "게시글 조회 실패");
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);

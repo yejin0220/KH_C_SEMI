@@ -36,7 +36,6 @@ public class mateBoardService {
 	
 	public int insertMateBoard(Board b, ArrayList<Attachment> list) {
 		Connection conn = getConnection();
-
 		
 		int result1 = new mateBoardDao().insertMateBoard(conn, b);
 		
@@ -51,6 +50,9 @@ public class mateBoardService {
 		}else {
 			rollback(conn);
 		}
+		
+		close(conn);
+		
 		return result1*result2;
 		
 		

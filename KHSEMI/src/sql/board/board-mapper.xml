@@ -13,7 +13,7 @@
 		FROM(	
 			SELECT ROWNUM RNUM, A.*
 			FROM 
-				(SELECT  BOARD_NO,
+				(SELECT BOARD_NO,
 						BOARD_TITLE,
 						BOARD_CONTENT,
 						USER_NICKNAME,
@@ -28,44 +28,33 @@
 			)
 		WHERE RNUM BETWEEN ? AND ?
 	</entry>
-	
-<!-- 	<entry key="selectMateList">
-		SELECT BOARD_NO,
-			   BOARD_TITLE, 
-			   BOARD_CONTENT,
-			   USER_NICKNAME,
-			   B.ADDRESS,
-			   B.CREATE_DATE,
-			   COUNT
-		FROM BOARD B
-		JOIN MEMBER M ON(BOARD_WRITER = USER_NO)
-		WHERE BOARD_TYPE = 1 AND B.STATUS='Y'
-	</entry> -->
+
 	
 	<entry key="insertMateBoard">
 			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER, ADDRESS)
-			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,2,?)
+			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,?,?)
 	</entry>
 	
 	<entry key="insertAttachment">
 		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH)
 		VALUES(SEQ_FNO.NEXTVAL, SEQ_BNO.CURRVAL, ?,?,?)
 	</entry>
+	
 	<entry key="increaseCount">
 		UPDATE BOARD
-		SET COUNT +1
+		SET COUNT = COUNT +1
 		WHERE BOARD_NO = ? AND STATUS='Y' 
 	</entry>
 	
 	<entry key="selectBoard">
 		SELECT BOARD_NO,
-			   ADDRESS,
+			   B.ADDRESS,
 			   BOARD_TITLE,
 			   USER_NICKNAME,
-			   CREATEDATE,
+			   B.CREATE_DATE,
 			   BOARD_CONTENT
 		FROM BOARD B
-		JOIN MEMBER M  ON(BOARD_WRITER = USER_NO)
+		JOIN MEMBER ON(BOARD_WRITER = USER_NO)
 		WHERE BOARD_NO = ? AND B.STATUS = 'Y'
 		
 	</entry>

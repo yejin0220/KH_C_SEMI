@@ -67,7 +67,7 @@ public class MateboardListController extends HttpServlet {
 		
 		request.getRequestDispatcher("views/mateboard/mateboardlist.jsp").forward(request, response);
 		
-
+	
 		
 	}
 

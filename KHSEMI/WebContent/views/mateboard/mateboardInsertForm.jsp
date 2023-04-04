@@ -1,8 +1,10 @@
+<%@ page import="com.kh.member.model.vo.Member" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
   String contextPath = request.getContextPath();
   String alertMsg = (String)session.getAttribute("alertMsg");
+  Member loginUser = (Member)request.getAttribute("loginUser");
 %>
 <!DOCTYPE html>
 <html>
@@ -71,13 +73,15 @@
             </div>
             
             <hr>
+            
+			<input type="hidden" name="userNo" value="<%=loginUser.getUserNo() %>">
 
             <img src="<%=contextPath %>/resources/메이트소개글쓰기.png" height="65">
             <div class="write-content">
-              <div class="write-info"><span> 한 줄 소개글 : </span> <input type="text" placeholder="산책메이트를 위한 한 줄 소개글을 입력해주세요" size="140"></div>
-              <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content"></textarea>
+             <div class="write-info"><span> 한 줄 소개글 : </span> <input type="text" placeholder="산책메이트를 위한 한 줄 소개글을 입력해주세요" size="140"></div>
+             <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content"></textarea>
             </div>
-
+           
             <img src="<%=contextPath %>/resources/메이트 위치 정하기.png" height="68">
             <div id="map">
 				
@@ -110,7 +114,7 @@
       <div class="footer"></div>
 
 
-
+	
     </div>
     
     <script>
