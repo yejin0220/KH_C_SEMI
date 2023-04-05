@@ -1,10 +1,11 @@
-<%@ page import="com.kh.mateboard.model.vo.Board, com.kh.common.model.Attachment" %>
+<%@ page import="com.kh.mateboard.model.vo.Board, com.kh.common.model.Attachment, com.kh.member.model.vo.Member" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
 	Board b = (Board)request.getAttribute("b");
-	Attachment at = (Attachment)request.getAttribute("at");
-
+	Attachment at = (Attachment)request.getAttribute("at");	
+	Member loginUser =  (Member)session.getAttribute("loginUser");
+	String contextPath = (String)request.getContextPath();
 
 %>
 <!DOCTYPE html>
@@ -15,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-<link href="resources/css/03_mateDetail.css?after" rel="stylesheet">
+<link href="resources/css/03_mateDetail.css?afterlike" rel="stylesheet">
 </head>
 
 <body>
@@ -59,7 +60,7 @@
 	    
 	                <img src="resources/소개글보기-.png" height="60">
 	                <div class="write-content">
-	    				<textarea  cols="166" rows="13" style="resize:none;" name="content" class="content"><%=b.getBoardContent() %></textarea>
+	    				<textarea  cols="166" rows="13" style="resize:none;" name="content" class="content" readonly="readonly"><%=b.getBoardContent() %></textarea>
 	                </div>
 	    
 	                <img src="resources/메이트만날장소-.png" height="63">
@@ -78,7 +79,7 @@
 	                              	<%if(at == null){ %>
 	                              		<p>아직 활동사진이 등록되지 않았습니당</p>
 	                              	<%}else { %>
-	                              		<img src="<%=request.getContextPath()%>/<%=at.getFilePath()+at.getChangeName()%>">
+	                              		<img src="<%=contextPath%>/<%=at.getFilePath()+at.getChangeName()%>">
 	                              	<%} %>
 	                              </div>
 	                            </div>
@@ -93,12 +94,34 @@
 	        </div>
         
 	        <div class="btn-div">
-	            <button class="apply">신청하기</button>
-	            <button type="reset">취소하기</button>
+	        	
+	        	<%if(loginUser != null&&loginUser.getUserNickname().equals(b.getBoardWriter())) { %>
+	        		
+	        		<button class="reupload"><a href="<%=contextPath%>/update.list?bno=<%=b.getBoardNo()%>">수정하기</a></button>
+	        		<button class="delete" onclick="delete">삭제하기</button>
+	        	<%}else{ %>
+		            <button class="apply">신청하기</button>
+	      
+	        	<%} %>
+	        
+	            <button type="reset"><a href="<%=contextPath%>/list.mate?currentPage=1">목록가기</a></button>
+	            
+	            
 	        </div>
 
     	</div>
     </div>
+    
+    <script>
+    	function delete(){
+    		if(!confirm("정말 삭제하시겠습니까?")){
+    			return
+    		}
+    		
+    		location.href="<%=contextPath%>/delete.mate?bno=<%=b.getBoardNo()%>";
+    	}
+    
+    </script>
 
 </body>
 </html>

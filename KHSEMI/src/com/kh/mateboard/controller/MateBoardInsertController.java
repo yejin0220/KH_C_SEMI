@@ -41,6 +41,7 @@ public class MateBoardInsertController extends HttpServlet {
 		
 		
 		
+		
 		request.getRequestDispatcher("views/mateboard/mateboardInsertForm.jsp").forward(request, response);
 	
 	}
@@ -72,9 +73,10 @@ public class MateBoardInsertController extends HttpServlet {
 			String address = multi.getParameter("address1")+","+multi.getParameter("address2");
 			String userNo = multi.getParameter("userNo");
 			
+		
 			Board b = new Board(title, content, address, userNo);
 			
-			ArrayList<Attachment> list = new ArrayList();
+			ArrayList<Attachment> list = new ArrayList<>();
 			
 				
 				if(multi.getOriginalFileName("upfile") != null) {
@@ -84,6 +86,8 @@ public class MateBoardInsertController extends HttpServlet {
 					at.setFilePath("resources/board_upfiles/");
 					
 					list.add(at);
+					
+
 				}
 				
 			int result = new mateBoardService().insertMateBoard(b, list);

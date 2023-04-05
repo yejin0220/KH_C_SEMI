@@ -105,3 +105,8 @@ img {
 	width: 180px;
 	height: 230px;
 }
+
+/*버튼*/
+.reupload, .delete, .apply{
+	margin-right:50px;
+}

@@ -45,6 +45,7 @@ public class mateBoardService {
 			result2 = new mateBoardDao().insertAttachment(conn, list);
 		}
 		
+		
 		if(result1>0 && result2>0) {
 			commit(conn);
 		}else {
@@ -92,5 +93,36 @@ public class mateBoardService {
 		
 		return at;
 	}
+	
+	public int updateMate(Board b, Attachment at) {
+		Connection conn = getConnection();
+		
+		int result1 = new mateBoardDao().updateBoard(conn, b);
+		int result2 = 1;
+		
+		if(at != null) {
+			
+			if(at.getFileNo() != 0) {
+				result2 = new mateBoardDao().updateAttachment(conn, at);
+			}else {
+				result2 = new mateBoardDao().insertNewAttachment(conn, at);
+			}
+			
+		}
+		
+		if(result1 >0  && result2>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		
+		return result1 * result2;
+		
+		
+		
+		
+	}
+	
+
 	
 }

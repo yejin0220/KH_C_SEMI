@@ -67,4 +67,23 @@
 		FROM ATTACHMENT
 		WHERE REF_BNO = ? AND STATUS='Y'
 	</entry>
+	<entry key="updateBoard">
+		UPDATE BOARD
+		SET BOARD_TITLE =?
+			ADDRESS = ?
+		    BOARD_CONTENT = ?
+		WHERE BOARD_NO = ? AND STATUS= 'Y'   
+	</entry>
+	<entry key="updateAttachment">
+		UPDATE ATTACHMENT
+		SET ORIGIN_NAME = ?,
+			CHANGE_NAME=?,
+			FILE_PAHT=?,
+			UPLOAD_DATE = SYSDATE,
+		WHERE FILE_NO = ?	
+	</entry>
+	<entry key="insertNewAttachment">
+		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORINI_NAME, CHANGE_NAME, FILE_PATH)
+		VALUES(SEQ_FNO.NEXTVAL, ?,?,?,?)
+	</entry>
 </properties>

@@ -1,23 +1,24 @@
-<%@ page import="com.kh.member.model.vo.Member" %>
+<%@ page import="com.kh.mateboard.model.vo.Board, com.kh.common.model.Attachment, com.kh.member.model.vo.Member" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-  String contextPath = request.getContextPath();
-  String alertMsg = (String)session.getAttribute("alertMsg");
-  Member loginUser = (Member)session.getAttribute("loginUser");
+	Board b = (Board)request.getAttribute("b");
+	Attachment at = (Attachment)request.getAttribute("at");	
+	Member loginUser =  (Member)session.getAttribute("loginUser");
+	String contextPath = (String)request.getContextPath();
+	
+	String address=  (String)request.getAttribute("address");
+	
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>산책메이트 게시판 글쓰기</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<link href="resources/css/02_mateWrite.css?after" rel="stylesheet">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ae890d646304659e5b68c9a99be204bf"></script>
-<style>
-
-</style>
+<title>메이트 게시판 수정하기</title>
 </head>
+<body>
+	
+	
 <body>
 	
 	 <div class="wrap">
@@ -39,12 +40,13 @@
       
       <br><br>
       <div class="walk-content3">
-        <form action="<%=contextPath %>/insert.mate" method="post" enctype="multipart/form-data">
+        <form action="<%=contextPath %>/update.mate" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="userNo" value="<%=loginUser.getUserNo()%>">	
           <div class="walk-write">
             <div class="walk-name">
               <div class="search_box">
                 <select name="address1" id="" onchange="categoryChange(this)" class="address1" >
+                 
                   <option value>광역시/도 선택</option>
                   <option value="강원도">강원도</option>
                   <option value="경기도">경기도</option>
@@ -79,7 +81,7 @@
             <img src="<%=contextPath %>/resources/메이트소개글쓰기.png" height="65">
             <div class="write-content">
              <div class="write-info"><span> 한 줄 소개글 : </span> <input type="text" placeholder="산책메이트를 위한 한 줄 소개글을 입력해주세요" size="140"></div>
-             <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content"></textarea>
+             <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content"><%=b.getBoardContent() %></textarea>
             </div>
            
             <img src="<%=contextPath %>/resources/메이트 위치 정하기.png" height="68">
@@ -104,20 +106,13 @@
             
           </div>
           <div class="btn-div">
-            <button type="submit" class="btn-upload" >등록하기</button>
+            <button type="submit" class="btn-upload" >수정하기</button>
             <button type="reset" class="btn-reset"><a href="<%=contextPath%>/list.mate?currentPage=1">목록가기</a></button>
           </div>
         </form>
       </div>
       
-
-      <div class="footer"></div>
-
-
-	
-    </div>
-    
-    <script>
+       <script>
 	    function categoryChange(e) {
 	        const state = document.getElementById("state");
 	
@@ -233,6 +228,6 @@
 	       
 	     }
 	</script>
-  
+
 </body>
 </html>

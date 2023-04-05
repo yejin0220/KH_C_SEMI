@@ -5,7 +5,7 @@
    	String contextPath = request.getContextPath();
    	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
-	
+	Member loginUser = (Member)session.getAttribute("loginUser");
 	
 	
 	
@@ -99,9 +99,9 @@
             </form>
             <div class="content3-block" style="width:3%;"></div>
             
-           
+           	<%if(loginUser != null){ %>
           		 <button type="button" id="mate_write"><a href="<%=contextPath%>/insert.mate">게시판 글쓰기</a></button>
-          	
+          	<%} %>
         </div>
 		
 		<div class="content4"></div>
