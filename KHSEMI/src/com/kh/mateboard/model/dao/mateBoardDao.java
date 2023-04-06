@@ -123,6 +123,8 @@ public class mateBoardDao {
 			pstmt.setString(2, b.getBoardContent());
 			pstmt.setInt(3, Integer.parseInt(b.getBoardWriter()));
 			pstmt.setString(4, b.getAddress());
+			pstmt.setDouble(5, b.getLatitude());
+			pstmt.setDouble(6, b.getLongitude());
 			
 			result = pstmt.executeUpdate();
 			
@@ -215,7 +217,9 @@ public class mateBoardDao {
 							  rset.getString("BOARD_CONTENT"),
 							  rset.getString("USER_NICKNAME"),
 							  rset.getDate("CREATE_DATE"),
-							  rset.getString("ADDRESS"));
+							  rset.getString("ADDRESS"),
+							  rset.getDouble("LATITUDE"),
+							  rset.getDouble("LONGITUDE"));
 					
 			}
 		} catch (SQLException e) {
@@ -264,12 +268,14 @@ public class mateBoardDao {
 		String sql = prop.getProperty("updateBoard");
 		
 		try {
-			pstmt = conn.prepareStatement("updateBoard");
+			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, b.getBoardTitle());
 			pstmt.setString(2, b.getAddress());
-			pstmt.setString(3, b.getBoardTitle());
-			pstmt.setInt(4, b.getBoardNo());
+			pstmt.setString(3, b.getBoardContent());
+			pstmt.setDouble(4, b.getLatitude());
+			pstmt.setDouble(5, b.getLongitude());
+			pstmt.setInt(6, b.getBoardNo());
 			
 			result = pstmt.executeUpdate();
 			
@@ -300,7 +306,32 @@ public class mateBoardDao {
 			
 			result = pstmt.executeUpdate();
 			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+		
+		
+	}
+	
+	public int insertNewAttachment(Connection conn, ArrayList<Attachment> list) {
+		int result=1;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("insertNewAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
 			
+			for(Attachment at : list) {
+				pstmt.setInt(1, at.getRefBno());
+				pstmt.setString(2, at.getOriginName());
+				pstmt.setString(3, at.getChangeName());
+				pstmt.setString(4, at.getFilePath());
+			}
+			
+			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -309,7 +340,5 @@ public class mateBoardDao {
 		return result;
 		
 	}
-	
-	
 
 }

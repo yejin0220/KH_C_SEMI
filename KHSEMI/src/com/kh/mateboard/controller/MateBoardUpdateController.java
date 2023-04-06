@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+
 import com.kh.common.model.Attachment;
 import com.kh.common.model.MyFileRenamePolicy;
 import com.kh.mateboard.model.service.mateBoardService;
@@ -54,6 +56,7 @@ public class MateBoardUpdateController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		if(ServletFileUpload.isMultipartContent(request)) {
 		
 		//전송되는 파일을 처리할 작업내용
 		//1)전송파일용량제한
@@ -73,10 +76,20 @@ public class MateBoardUpdateController extends HttpServlet {
 		String content = multi.getParameter("content");
 		String address = multi.getParameter("address1")+","+multi.getParameter("address2");
 		String userNo = multi.getParameter("userNo");
+		double latitude = Double.parseDouble(multi.getParameter("latitude"));
+		double longitude = Double.parseDouble(multi.getParameter("longitude"));
+		
+		
+		Board b = new Board();
+		b.setBoardNo(boardNo);
+		b.setBoardTitle(title);
+		b.setBoardContent(content);
+		b.setBoardWriter(userNo);
+		b.setAddress(address);
+		b.setLatitude(latitude);
+		b.setLongitude(longitude);
 		
 	
-		Board b = new Board(boardNo ,title, content, address, userNo);
-		
 		ArrayList<Attachment> list = new ArrayList<>();
 		
 		
@@ -100,7 +113,8 @@ public class MateBoardUpdateController extends HttpServlet {
 				}
 			
 			
-			int result = new mateBoardService().updateMate(b, at);
+			int result = new mateBoardService().updateMate(b, list, at);
+			System.out.println(at);
 			
 			if(result > 0) {
 				
@@ -146,4 +160,5 @@ public class MateBoardUpdateController extends HttpServlet {
 		
 	}
 
+	}
 }

@@ -104,26 +104,30 @@ public class Board {
 	}
 	
 
-	public Board(String boardTitle, String boardContent, String address, String boardWriter) {
+	public Board(String boardTitle, String boardContent, String address, String boardWriter,double latitude,double longitude) {
 		super();
 		this.boardTitle = boardTitle;
 		this.boardContent = boardContent;
 		this.address = address;
 		this.boardWriter=boardWriter;
+		this.latitude=latitude;
+		this.longitude=longitude;
 	}
 	
-	public Board(int boardNo,String boardTitle, String boardContent, String address, String boardWriter) {
+	public Board(int boardNo,String boardTitle, String boardContent, String address, String boardWriter,double latitude,double longitude) {
 		super();
 		this.boardNo=boardNo;
 		this.boardTitle = boardTitle;
 		this.boardContent = boardContent;
 		this.address = address;
 		this.boardWriter=boardWriter;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 	
 	
 
-	public Board(int boardNo,String boardTitle, String boardContent, String boardWriter, Date createDate, String address) {
+	public Board(int boardNo,String boardTitle, String boardContent, String boardWriter, Date createDate, String address,double latitude,double longitude) {
 		super();
 		this.boardNo = boardNo;
 		this.boardTitle = boardTitle;
@@ -131,6 +135,9 @@ public class Board {
 		this.boardWriter = boardWriter;
 		this.createDate = createDate;
 		this.address = address;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		
 	}
 
 	public int getBoardNo() {

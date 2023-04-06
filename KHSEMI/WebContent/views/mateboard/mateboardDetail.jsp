@@ -17,6 +17,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 <link href="resources/css/03_mateDetail.css?afterlike" rel="stylesheet">
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -65,7 +69,6 @@
 	    
 	                <img src="resources/메이트만날장소-.png" height="63">
 	                <div id="map">
-	    
 	                </div>
 	    
 	                <img src="resources/사진구경하기-.png" height="60">
@@ -79,7 +82,8 @@
 	                              	<%if(at == null){ %>
 	                              		<p>아직 활동사진이 등록되지 않았습니당</p>
 	                              	<%}else { %>
-	                              		<img src="<%=contextPath%>/<%=at.getFilePath()+at.getChangeName()%>">
+	                              		
+	                              		 <img src="<%=contextPath%>/<%=at.getFilePath()+at.getChangeName()%>"> 
 	                              	<%} %>
 	                              </div>
 	                            </div>
@@ -97,14 +101,14 @@
 	        	
 	        	<%if(loginUser != null&&loginUser.getUserNickname().equals(b.getBoardWriter())) { %>
 	        		
-	        		<button class="reupload"><a href="<%=contextPath%>/update.list?bno=<%=b.getBoardNo()%>">수정하기</a></button>
-	        		<button class="delete" onclick="delete">삭제하기</button>
+	        		<button class="reupload btn btn-info"><a href="<%=contextPath%>/update.mate?bno=<%=b.getBoardNo()%>">수정하기</a></button>
+	        		<button class="delete btn btn-outline-warning" onclick="delete">삭제하기</button>
 	        	<%}else{ %>
-		            <button class="apply">신청하기</button>
+		            <button class="apply btn btn-outline-info">신청하기</button>
 	      
 	        	<%} %>
 	        
-	            <button type="reset"><a href="<%=contextPath%>/list.mate?currentPage=1">목록가기</a></button>
+	            <button type="reset " class="btn btn-info"><a href="<%=contextPath%>/list.mate?currentPage=1">목록가기</a></button>
 	            
 	            
 	        </div>
@@ -122,6 +126,25 @@
     	}
     
     </script>
-
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=74c4595a346e879941f9b54bcb0a86f0"></script>
+	<script>
+	        const lat = <%=b.getLatitude()%>;
+	        const long = <%=b.getLongitude()%>;
+	        
+	        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	            mapOption = { 
+	                center: new kakao.maps.LatLng(lat, long), // 지도의 중심좌표
+	                level: 3 // 지도의 확대 레벨
+	            };
+	        
+	        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	        
+	        var marker = new kakao.maps.Marker({ 
+	            // 지도 중심좌표에 마커를 생성합니다 
+	            position: map.getCenter() 
+	        }); 
+	        // 지도에 마커를 표시합니다
+	        marker.setMap(map);
+     </script>
 </body>
 </html>

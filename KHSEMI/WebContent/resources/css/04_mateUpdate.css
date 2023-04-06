@@ -132,7 +132,7 @@
 
 .next {
   right: 150px;
-  background-image: url(resources/KakaoTalk_20230320_141959451.png);
+  background-image: url(resources/img/KakaoTalk_20230320_141959451.png);
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: 50% 50%;
@@ -140,7 +140,7 @@
 }
 .prev{
   left: 150px;
-  background-image: url(resources/KakaoTalk_20230320_141959518.png);
+  background-image: url(resources/img/KakaoTalk_20230320_141959518.png);
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: 50% 50%;

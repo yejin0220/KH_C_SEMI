@@ -31,8 +31,8 @@
 
 	
 	<entry key="insertMateBoard">
-			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER, ADDRESS)
-			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,?,?)
+			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER, ADDRESS, LATITUDE, LONGITUDE)
+			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,?,?,?,?)
 	</entry>
 	
 	<entry key="insertAttachment">
@@ -52,7 +52,9 @@
 			   BOARD_TITLE,
 			   USER_NICKNAME,
 			   B.CREATE_DATE,
-			   BOARD_CONTENT
+			   BOARD_CONTENT,
+			   LATITUDE,
+			   LONGITUDE
 		FROM BOARD B
 		JOIN MEMBER ON(BOARD_WRITER = USER_NO)
 		WHERE BOARD_NO = ? AND B.STATUS = 'Y'
@@ -69,9 +71,11 @@
 	</entry>
 	<entry key="updateBoard">
 		UPDATE BOARD
-		SET BOARD_TITLE =?
-			ADDRESS = ?
-		    BOARD_CONTENT = ?
+		SET BOARD_TITLE =?,
+			ADDRESS = ?,
+		    BOARD_CONTENT = ?,
+		    LATITUDE = ?,
+		    LONGITUDE = ?
 		WHERE BOARD_NO = ? AND STATUS= 'Y'   
 	</entry>
 	<entry key="updateAttachment">
@@ -79,11 +83,11 @@
 		SET ORIGIN_NAME = ?,
 			CHANGE_NAME=?,
 			FILE_PAHT=?,
-			UPLOAD_DATE = SYSDATE,
+			UPLOAD_DATE = SYSDATE
 		WHERE FILE_NO = ?	
 	</entry>
 	<entry key="insertNewAttachment">
-		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORINI_NAME, CHANGE_NAME, FILE_PATH)
+		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH)
 		VALUES(SEQ_FNO.NEXTVAL, ?,?,?,?)
 	</entry>
 </properties>

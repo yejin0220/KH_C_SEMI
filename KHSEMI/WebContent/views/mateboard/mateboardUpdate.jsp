@@ -7,19 +7,21 @@
 	Member loginUser =  (Member)session.getAttribute("loginUser");
 	String contextPath = (String)request.getContextPath();
 	
-	String address=  (String)request.getAttribute("address");
-	
+	String address= b.getAddress();
+	int index = address.indexOf(",");
+	String address1 = address.substring(0, index);
+	String address2 = address.substring(index+1);
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>메이트 게시판 수정하기</title>
+<link href="resources/css/04_mateUpdate.css?after" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 <body>
-	
-	
-<body>
+
 	
 	 <div class="wrap">
       	 <div class="content1">
@@ -41,13 +43,14 @@
       <br><br>
       <div class="walk-content3">
         <form action="<%=contextPath %>/update.mate" method="post" enctype="multipart/form-data">
+      		<input type="hidden" name="bno" value="<%= b.getBoardNo()%>">
 			<input type="hidden" name="userNo" value="<%=loginUser.getUserNo()%>">	
           <div class="walk-write">
             <div class="walk-name">
               <div class="search_box">
                 <select name="address1" id="" onchange="categoryChange(this)" class="address1" >
                  
-                  <option value>광역시/도 선택</option>
+                  <option ><%=address1 %></option>
                   <option value="강원도">강원도</option>
                   <option value="경기도">경기도</option>
                   <option value="경상남도">경상남도</option>
@@ -68,26 +71,24 @@
             </div>
             <div class="search_box">
                 <select name="address2" id="state" class="address2">
-                    <option>군/구 선택</option>
+                    <option><%= address2 %></option>
                 </select>
             </div>
-              <input type="text" class="title" name="title" placeholder="게시글 제목을 입력하세요" required>
+              <input type="text" class="title" name="title" placeholder="게시글 제목을 입력하세요" required value="<%=b.getBoardTitle()%>" size="120">
             </div>
             
             <hr>
-            
-			
 
             <img src="<%=contextPath %>/resources/메이트소개글쓰기.png" height="65">
             <div class="write-content">
              <div class="write-info"><span> 한 줄 소개글 : </span> <input type="text" placeholder="산책메이트를 위한 한 줄 소개글을 입력해주세요" size="140"></div>
-             <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content"><%=b.getBoardContent() %></textarea>
+             <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content" ><%=b.getBoardContent() %></textarea>
             </div>
            
             <img src="<%=contextPath %>/resources/메이트 위치 정하기.png" height="68">
-            <div id="map">
-				
-            </div>
+            <div id="map"></div>
+            <input type="text" hidden id="latitude" name="latitude">
+            <input type="text" hidden id="longitude" name="longitude">
 
             <img src="<%=contextPath %>/resources/사진첨부하기.png" height="70">
            	
@@ -95,7 +96,16 @@
               <div class="prev btn-pic"></div>
                 <div class="items">
                   <div class="item active">
-                    <div class="picture"></div>
+                    <div class="picture">
+                    	<%if(at != null) {%>
+                    		
+                    		
+                    		<img src="<%=contextPath %>/<%=at.getFilePath()+at.getChangeName()%>">
+                    		
+                    		<input type="hidden" name="originFileNo" value="<%=at.getFileNo() %>">
+		         			<input type="hidden" name="changeFileName" value="<%=at.getChangeName() %>">
+                    	<%} %>
+                    </div>
                   </div>
                 </div>
                <div class="next btn-pic"></div>
@@ -106,7 +116,7 @@
             
           </div>
           <div class="btn-div">
-            <button type="submit" class="btn-upload" >수정하기</button>
+            <button type="submit" class="btn-upload">수정하기</button>
             <button type="reset" class="btn-reset"><a href="<%=contextPath%>/list.mate?currentPage=1">목록가기</a></button>
           </div>
         </form>
@@ -179,38 +189,41 @@
 	    }
 	    
     </script>
-     <script>
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-            mapOption = { 
-                center: new kakao.maps.LatLng(37.566535874777784, 126.97860140554657), // 지도의 중심좌표
-                level: 8 // 지도의 확대 레벨
-            };
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=74c4595a346e879941f9b54bcb0a86f0"></script>
+   <script>
+	        const lat = <%=b.getLatitude() %>;
+	        const long = <%= b.getLongitude()%>;
         
-        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-        
-        // 지도를 클릭한 위치에 표출할 마커입니다
-        var marker = new kakao.maps.Marker({ 
-            // 지도 중심좌표에 마커를 생성합니다 
-            position: map.getCenter() 
-        }); 
-        // 지도에 마커를 표시합니다
-        marker.setMap(map);
-        
-        // 지도에 클릭 이벤트를 등록합니다
-        // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
-            
-            // 클릭한 위도, 경도 정보를 가져옵니다 
-            var latlng = mouseEvent.latLng; 
-            
-            // 마커 위치를 클릭한 위치로 옮깁니다
-            marker.setPosition(latlng);
-            
-            $("#latitude").val(latlng.getLat());
-            $("#longitude").val(latlng.getLng());
-    	});
-    </script>
-    
+	        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	            mapOption = { 
+	                center: new kakao.maps.LatLng(lat, long), // 지도의 중심좌표
+	                level: 3 // 지도의 확대 레벨
+	            };
+	        
+	        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	        
+	        // 지도를 클릭한 위치에 표출할 마커입니다
+	        var marker = new kakao.maps.Marker({ 
+	            // 지도 중심좌표에 마커를 생성합니다 
+	            position: map.getCenter() 
+	        }); 
+	        // 지도에 마커를 표시합니다
+	        marker.setMap(map);
+	        
+	        // 지도에 클릭 이벤트를 등록합니다
+	        // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+	        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
+	            
+	            // 클릭한 위도, 경도 정보를 가져옵니다 
+	            var latlng = mouseEvent.latLng; 
+	            
+	            // 마커 위치를 클릭한 위치로 옮깁니다
+	            marker.setPosition(latlng);
+	            
+	            $("#latitude").val(latlng.getLat());
+	            $("#longitude").val(latlng.getLng());
+	        });
+        </script>
 	<script type="text/javascript">
 	     function setThumbnail(event) {
 	       for (var image of event.target.files) {
@@ -228,6 +241,7 @@
 	       
 	     }
 	</script>
+
 
 </body>
 </html>

@@ -13,7 +13,6 @@
 <title>산책메이트 게시판 글쓰기</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <link href="resources/css/02_mateWrite.css?after" rel="stylesheet">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ae890d646304659e5b68c9a99be204bf"></script>
 <style>
 
 </style>
@@ -40,6 +39,7 @@
       <br><br>
       <div class="walk-content3">
         <form action="<%=contextPath %>/insert.mate" method="post" enctype="multipart/form-data">
+        	
 			<input type="hidden" name="userNo" value="<%=loginUser.getUserNo()%>">	
           <div class="walk-write">
             <div class="walk-name">
@@ -83,9 +83,10 @@
             </div>
            
             <img src="<%=contextPath %>/resources/메이트 위치 정하기.png" height="68">
-            <div id="map">
-				
-            </div>
+            <div id="map"></div>
+            
+            <input type="text" hidden id="latitude" name="latitude">
+            <input type="text" hidden id="longitude" name="longitude">
 
             <img src="<%=contextPath %>/resources/사진첨부하기.png" height="70">
            	
@@ -184,7 +185,8 @@
 	    }
 	    
     </script>
-     <script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=74c4595a346e879941f9b54bcb0a86f0"></script>
+    <script>
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
             mapOption = { 
                 center: new kakao.maps.LatLng(37.566535874777784, 126.97860140554657), // 지도의 중심좌표

@@ -72,9 +72,10 @@ public class MateBoardInsertController extends HttpServlet {
 			String content = multi.getParameter("content");
 			String address = multi.getParameter("address1")+","+multi.getParameter("address2");
 			String userNo = multi.getParameter("userNo");
-			
+			double latitude = Double.parseDouble(multi.getParameter("latitude"));
+			double longitude = Double.parseDouble(multi.getParameter("longitude"));
 		
-			Board b = new Board(title, content, address, userNo);
+			Board b = new Board(title, content, address, userNo, latitude, longitude);
 			
 			ArrayList<Attachment> list = new ArrayList<>();
 			
@@ -96,6 +97,8 @@ public class MateBoardInsertController extends HttpServlet {
 			HttpSession session = request.getSession();
 			
 			if(result > 0) {
+				
+		
 				request.getSession().setAttribute("alertMsg", "게시글 등록 성공");
 				response.sendRedirect(request.getContextPath());
 			}else {

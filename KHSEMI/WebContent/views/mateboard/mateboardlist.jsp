@@ -70,7 +70,7 @@
             <form action="" method="get" class="location">
                 <div class="search_box">
                     <select name="address1" id="" onchange="categoryChange(this)" class="address1">
-                      <option value>광역시/도 선택</option>
+                      <option>광역시/도 선택</option>
                       <option value="강원도">강원도</option>
                       <option value="경기도">경기도</option>
                       <option value="경상남도">경상남도</option>
