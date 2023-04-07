@@ -18,15 +18,7 @@
 .location{
     display: flex;
 }
-#search-btn, #mate_write{
-    border-radius: 7px;
-    border: 0;
-    width: 4rem;
-    height: 3rem;
-    background-color: rgb(0, 123, 255);
-    color: white;
-}
-#mate_write{width: 8rem;}
+
 .search1, .search2,.search-text{
    height: 3rem;
    border-radius: 7px;

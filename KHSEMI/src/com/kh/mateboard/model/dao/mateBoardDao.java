@@ -133,7 +133,8 @@ public class mateBoardDao {
 		}finally {
 			close(pstmt);
 		}
-		System.out.println(result);
+		
+		
 		return result;
 	}
 	
@@ -154,6 +155,7 @@ public class mateBoardDao {
 				pstmt.setString(1, at.getOriginName());
 				pstmt.setString(2, at.getChangeName());
 				pstmt.setString(3, at.getFilePath());
+				pstmt.setInt(4, at.getFileLevel());
 			}
 			
 			
@@ -167,7 +169,7 @@ public class mateBoardDao {
 			close(pstmt);
 		}
 		
-		System.out.println(result);
+		
 		return result;
 		
 		

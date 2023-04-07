@@ -45,7 +45,6 @@ public class mateBoardService {
 			result2 = new mateBoardDao().insertAttachment(conn, list);
 		}
 		
-		
 		if(result1>0 && result2>0) {
 			commit(conn);
 		}else {

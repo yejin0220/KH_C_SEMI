@@ -12,8 +12,208 @@
 <meta charset="UTF-8">
 <title>산책메이트 게시판 글쓰기</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<link href="resources/css/02_mateWrite.css?after" rel="stylesheet">
+<!-- <link href="resources/css/02_mateWrite.css?after" rel="stylesheet"> -->
 <style>
+.wrap{
+    /* position: relative; */
+    width: 100%;
+    height: 100%;
+  }
+  .content_name{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .content2{
+    line-height: 2;
+    text-align: center;
+  }
+  .walk-write{
+    /* position: absolute; */
+    margin: 0 auto;
+    border: 1px solid black;
+    width: 70%;
+  
+    left: 13.5%;
+  }
+  .walk-name{
+    border: 1px solid red;
+    width: 95%;
+    display: inline-flex;
+    margin : 8px 0px 0px 12px;
+  }
+  .content3{
+    display: flex;
+    justify-content: space-around;
+}
+.location{
+    display: flex;
+}
+.address1, .address2{
+   height: 1.5rem;
+   border-radius: 7px;
+   border: 1px solid lightblue;
+}
+  .write-content, #map{
+    border: 3px solid rgb(106, 171, 240);
+    border-radius: 15px;
+    background-color:  rgb(230, 242, 255);
+    width: 95%;
+    height: 20rem;
+    margin: 0 auto;
+  }
+  
+  #container{
+    border: 3px solid rgb(106, 171, 240);
+    border-radius: 15px;
+    background-color:  rgb(230, 242, 255);
+    width: 95%;
+    height: 28rem;
+    margin: 0 auto;
+  }
+
+ .write-info{
+ 	margin : 15px 0px 10px 10px;
+ }
+
+  textarea{
+    border-radius: 15px;
+    margin-left: 10px;
+    padding : 20px 20px;
+    
+  }
+
+  img{
+    margin-top: 20px;
+  }
+  
+ .btn-div{
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+ }
+
+ .btn-upload, .btn-reset {
+	width: 100px;
+	height: 40px;
+	border-radius: 10px;
+	font-size: medium;
+	font-weight: 900;
+	background-color: white;
+}
+
+.btn-upload {
+	border: 2px solid rgb(106, 171, 240);
+	color: rgb(106, 171, 240);
+	margin-right: 50px;
+}
+
+.btn-reset {
+	border: 2px solid gray;
+}
+
+
+
+ /*사진보여주기 style*/
+ .items {
+  /* border: 1px solid red; */
+  margin: 0 auto;
+  width: 85%;
+  height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+.active {
+  display: flex;
+  height: 400px;
+  width: 1600px;
+  color: white;
+  position: relative;
+  border: 1px solid blue;
+}
+
+.btn-pic,
+.prev:active,
+.prev:focus,
+.next:active,
+.next:focus{
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background-color: white;
+  box-shadow: 0px 0px 3px rgb(209, 202, 202);
+  outline: none;
+  cursor: pointer;
+}
+
+.next {
+  right: 150px;
+  background-image: url(resources/KakaoTalk_20230320_141959451.png);
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  
+}
+.prev{
+  left: 150px;
+  background-image: url(resources/KakaoTalk_20230320_141959518.png);
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.stepper {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.step {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(218, 214, 214);
+  margin: 0 6px;
+}
+
+.active-step {
+  background-color: darkgray;
+}
+
+.active>div {
+  width: 1300px;
+  height: 100%;
+  margin: 15px
+}
+
+.picture{
+	display: flex;
+	justify-content: space-evenly;
+	flex-wrap:nowrap;
+	border: 1px solid black;
+}
+
+.picture img{
+	border: 1px solid red;
+	border-radius: 30px;
+	width: 250px;
+	height:300px;
+
+}
 
 </style>
 </head>
@@ -99,14 +299,14 @@
                 </div>
                <div class="next btn-pic"></div>
             </div>
-            <input type="file" id="image" accept="image/*" onchange="setThumbnail(event);" name="upfile" multiple/>
+            <input type="file" id="file" accept="image/*" onchange="loadImg(this);" name="file" multiple/>
             <br>
             <div class="block" style="height: 10px;"></div>
             
           </div>
           <div class="btn-div">
             <button type="submit" class="btn-upload" >등록하기</button>
-            <button type="reset" class="btn-reset"><a href="<%=contextPath%>/list.mate?currentPage=1">목록가기</a></button>
+            <button type="reset" class="btn-reset"><a href="<%=contextPath%>/list.mate?currentPage=1" style="text-decoration: none; color:gray;">목록가기</a></button>
           </div>
         </form>
       </div>
@@ -217,7 +417,7 @@
             $("#longitude").val(latlng.getLng());
     	});
     </script>
-    
+   <!--  
 	<script type="text/javascript">
 	     function setThumbnail(event) {
 	       for (var image of event.target.files) {
@@ -234,6 +434,37 @@
 	       }
 	       
 	     }
+	</script> -->
+	
+	<script>
+	
+	  function loadImg(inputFile) {
+      	// inputFile : 현재 변화가 생긴 input type="file"요소
+      	//console.log(inputFile.files.length);
+      	
+      	if(inputFile.files.length != 0){
+      		// 선택된 파일이 존재할 경우에 선택된 파일들을 읽어들여서 미리보기 생성
+			
+      		for(let i=0; i<inputFile.files.length; i++){
+          		let reader = new FileReader();
+          		
+      			reader.readAsDataURL(inputFile.files[i]);
+      			
+      			reader.onload = function(e){
+      				let url = e.target.result;
+      				$("<img id='contentImg"+i+"' width='150' height='120'>").appendTo(".picture");
+      				$("#contentImg"+i).attr("src", url); 
+      				
+      			}
+      		}
+      		
+      	}else{
+      		$(".picture").empty();
+      	
+      	
+      	}
+	  }
+      
 	</script>
   
 </body>

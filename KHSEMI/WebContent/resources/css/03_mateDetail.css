@@ -71,7 +71,7 @@
 	line-height: 0.5;
 }
 
-textarea {
+#content {
 	border-radius: 15px;
 	margin: 17.5px 0px 0px 15px;
 	padding: 20px 20px;
@@ -85,6 +85,25 @@ img {
 	display: flex;
 	justify-content: center;
 	margin-top: 30px;
+}
+
+.btn-upload, .btn-reset {
+	width: 100px;
+	height: 40px;
+	border-radius: 10px;
+	font-size: medium;
+	font-weight: 900;
+	background-color: white;
+}
+
+.btn-upload {
+	border: 2px solid rgb(106, 171, 240);
+	color: rgb(106, 171, 240);
+}
+
+.btn-reset {
+	border: 2px solid gray;
+	color: gray;
 }
 
 .btn-upload {

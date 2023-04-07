@@ -44,6 +44,22 @@
 	height:400px;
 	margin-bottom:50px;
 }
+#search-btn{
+	width: 4rem;
+    height: 3rem;
+}
+
+#mate_writer{
+	width:8rem;
+}
+#search-btn, #mate_write{
+    border-radius: 7px;
+    background-color: white;
+    color:rgb(106, 171, 240);
+    font-size:medium;
+    font-weight:900;
+    border: 3px solid rgb(106, 171, 240);
+}
 
 </style>
 </head>
@@ -100,7 +116,7 @@
             <div class="content3-block" style="width:3%;"></div>
             
            	<%if(loginUser != null){ %>
-          		 <button type="button" id="mate_write"><a href="<%=contextPath%>/insert.mate">게시판 글쓰기</a></button>
+          		 <button type="button" id="mate_write"><a href="<%=contextPath%>/insert.mate" style="text-decoration: none; color:rgb(106, 171, 240);">게시판 글쓰기</a></button>
           	<%} %>
         </div>
 		
