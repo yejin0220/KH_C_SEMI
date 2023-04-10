@@ -144,9 +144,9 @@
 				                            <img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png"><span class="thumb-number">추천수</span>
 				                            <img class="card-heart" src="<%=contextPath %>/resources/빈하트.png"><span class="heart-number">참여자수</span>
 				                    </div>
+		                    </div>
 				                     <span class="count" style="font-size: small;"><%=b.getCount() %></span>
 				                     <span class="create-date" style="font-size: small;"><%=b.getCreateDate() %></span>               
-		                    </div>
 		                </div>
 					
 					<%} %>

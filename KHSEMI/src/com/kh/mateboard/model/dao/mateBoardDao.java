@@ -14,6 +14,7 @@ import java.util.Properties;
 import com.kh.common.model.PageInfo;
 import com.kh.common.model.Attachment;
 import com.kh.mateboard.model.vo.Board;
+import com.kh.mateboard.model.vo.Reply;
 
 import static com.kh.common.JDBCTemplate.close;
  
@@ -341,6 +342,66 @@ public class mateBoardDao {
 		}
 		return result;
 		
+	}
+	
+	public int insertReply(Connection conn, Reply r) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("insertReply");
+		try {
+			pstmt= conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, r.getRefBno());
+			pstmt.setInt(2, r.getReplyWriter());
+			pstmt.setString(3, r.getReplyContent());
+			
+			result = pstmt.executeUpdate();
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+		
+	}
+	
+	public ArrayList<Reply> selectReplyList(Connection conn, int boardNo){
+		ArrayList<Reply> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectReplyList");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				list.add(new Reply(
+							rset.getInt("REPLY_NO"),
+							rset.getInt("REF_BNO"),
+							rset.getString("REPLY_CONTENT"),
+							rset.getDate("CREATE_DATE"),
+							rset.getString("STATUS"),
+							rset.getString("USER_NICKNAME")
+						));
+				
+				System.out.println(list);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		System.out.println(list);
+		return list;
 	}
 
 }

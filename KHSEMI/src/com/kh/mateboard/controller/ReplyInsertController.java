@@ -1,30 +1,27 @@
 package com.kh.mateboard.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.common.model.Attachment;
 import com.kh.mateboard.model.service.mateBoardService;
-import com.kh.mateboard.model.vo.Board;
 import com.kh.mateboard.model.vo.Reply;
+import com.kh.member.model.vo.Member;
 
 /**
- * Servlet implementation class MateBoardDetailController
+ * Servlet implementation class ReplyInsertController
  */
-@WebServlet("/detail.mate")
-public class MateBoardDetailController extends HttpServlet {
+@WebServlet("/replyInsert")
+public class ReplyInsertController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MateBoardDetailController() {
+    public ReplyInsertController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,35 +31,23 @@ public class MateBoardDetailController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		String replyContent = request.getParameter("content");
 		int boardNo = Integer.parseInt(request.getParameter("bno"));
+		int userNo = ((Member)request.getSession().getAttribute("loginUser")).getUserNo();
 		
-		//조회수 증가
-		int result = new mateBoardService().increaseCount(boardNo);
+		Reply r = new Reply();
+		r.setReplyContent(replyContent);
+		r.setRefBno(boardNo);
+		r.setReplyWriter(userNo);
 		
-		if(result>0) {
-			Board b = new mateBoardService().selectBoard(boardNo);
-			Attachment at = new mateBoardService().selectAttachment(boardNo);
-			ArrayList<Reply> list = new mateBoardService().selectReplyList(boardNo);
-			
-			request.setAttribute("b", b);
-			request.setAttribute("at", at);
-			request.setAttribute("list", list);
-			
-			request.getRequestDispatcher("views/mateboard/mateboardDetail.jsp").forward(request, response);
-			
 		
-		}else {
-			request.setAttribute("errorMsg", "게시글 조회 실패");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-		}
+		int result = new mateBoardService().insertReply(r);
 		
-	
-	
-	
-	
-	
-	
-	
+		
+		
+		response.getWriter().print(result);
+				
+		
 	
 	}
 
