@@ -238,7 +238,7 @@
       
       <br><br>
       <div class="walk-content3">
-        <form action="<%=contextPath %>/insert.mate" method="post" enctype="multipart/form-data">
+       <%--  <form action="<%=contextPath %>/insert.mate" method="post" enctype="multipart/form-data"> --%>
         	
 			<input type="hidden" name="userNo" value="<%=loginUser.getUserNo()%>">	
           <div class="walk-write">
@@ -294,7 +294,10 @@
               <div class="prev btn-pic"></div>
                 <div class="items">
                   <div class="item active">
-                    <div class="picture"></div>
+                    <div class="picture">
+                    	
+               			
+                    </div>
                   </div>
                 </div>
                <div class="next btn-pic"></div>
@@ -305,10 +308,10 @@
             
           </div>
           <div class="btn-div">
-            <button type="submit" class="btn-upload" >등록하기</button>
+            <button type="button" class="btn-upload" onclick="uploadList()">등록하기</button>
             <button type="reset" class="btn-reset"><a href="<%=contextPath%>/list.mate?currentPage=1" style="text-decoration: none; color:gray;">목록가기</a></button>
           </div>
-        </form>
+       
       </div>
       
 
@@ -417,34 +420,17 @@
             $("#longitude").val(latlng.getLng());
     	});
     </script>
-   <!--  
-	<script type="text/javascript">
-	     function setThumbnail(event) {
-	       for (var image of event.target.files) {
-	         var reader = new FileReader();
-	         
-	         reader.onload = function(event) {
-	           var img = document.createElement("img");
-	           img.setAttribute("src", event.target.result);
-	           document.querySelector("div.picture").appendChild(img);
-	         };
-	
-	         console.log(image);
-	         reader.readAsDataURL(image);
-	       }
-	       
-	     }
-	</script> -->
-	
 	<script>
 	
 	  function loadImg(inputFile) {
       	// inputFile : 현재 변화가 생긴 input type="file"요소
       	//console.log(inputFile.files.length);
       	
+		let fileLength = inputFile.files.length;
+	
       	if(inputFile.files.length != 0){
       		// 선택된 파일이 존재할 경우에 선택된 파일들을 읽어들여서 미리보기 생성
-			
+		
       		for(let i=0; i<inputFile.files.length; i++){
           		let reader = new FileReader();
           		
@@ -452,8 +438,9 @@
       			
       			reader.onload = function(e){
       				let url = e.target.result;
-      				$("<img id='contentImg"+i+"' width='150' height='120'>").appendTo(".picture");
-      				$("#contentImg"+i).attr("src", url); 
+      				$("<img id='contentImg"+i+"' width='150' height='120' name='contentImg"+i+"'>").appendTo(".picture");
+      				$("#contentImg"+i).attr("src", url);
+      				
       				
       			}
       		}
@@ -465,6 +452,42 @@
       	}
 	  }
       
+	</script>
+	<script>
+		function uploadList(){
+			let form = new FormData();
+			let address1 = $(".address1").val();
+			let address2 = $(".address2").val();
+			let title = $(".title").val();
+			let content = $(".content").val();
+			let latitude = $("#latitude").val();
+			let longitude = $("#longitude").val();
+			
+			$.each($("#file")[0].files, function(index, item){
+				form.append("file"+index, item);
+			})
+			form.append("title",title);
+			form.append("content", content);
+			form.append("address1", address1);
+			form.append("address2", address2);
+			form.append("latitude", latitude);
+			form.append("longitude", longitude);
+			form.append("fileLength", $("#file")[0].files.length);
+				
+			$.ajax({
+				url : "<%=contextPath%>/insert.mate",
+				data : form,
+				type : "post",
+				processData : false,
+				contentType : false,
+				success : function(data){
+					console.log("성공");
+					location.href="<%=contextPath%>/list.mate?currentPage=1"
+				}
+				
+			})	
+			
+		}
 	</script>
   
 </body>

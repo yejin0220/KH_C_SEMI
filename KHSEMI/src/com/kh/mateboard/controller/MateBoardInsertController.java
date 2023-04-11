@@ -18,6 +18,7 @@ import com.kh.common.model.MyFileRenamePolicy;
 import com.kh.common.model.Attachment;
 import com.kh.mateboard.model.service.mateBoardService;
 import com.kh.mateboard.model.vo.Board;
+import com.kh.member.model.vo.Member;
 import com.oreilly.servlet.MultipartRequest;
 
 /**
@@ -52,77 +53,55 @@ public class MateBoardInsertController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		request.setCharacterEncoding("UTF-8");
-
-		if (ServletFileUpload.isMultipartContent(request)) {
-
-			// 전송되는 파일을 처리할 작업내용
-			// 1)전송파일용량제한
-			int maxSize = 1024 * 1024 * 10;
-
-			// 2)파일을 저장할서버의 폴더경로 알아내기(String savePath)
-			String savePath = request.getSession().getServletContext().getRealPath("/resources/board_upfiles/");
-
-			// 3)전달된 파일명 수정 작업 및 파일 업로드
-			// MultupartRequest multi = new MultipartRequest(request 객체, 저장할 폴더 경로, 용량제한,
-			// 인코딩 설정값, 파일명을 수정시켜주는 객체);
-			MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8",
-					new MyFileRenamePolicy());
-
-			// 4)db에 넘길 데이터 저장하기
-			String title = multi.getParameter("title");
-			String content = multi.getParameter("content");
-			String address = multi.getParameter("address1") + "," + multi.getParameter("address2");
-			String userNo = multi.getParameter("userNo");
-			double latitude = Double.parseDouble(multi.getParameter("latitude"));
-			double longitude = Double.parseDouble(multi.getParameter("longitude"));
-
-			Board b = new Board(title, content, address, userNo, latitude, longitude);
-
-			ArrayList<Attachment> list = new ArrayList<>();
-			Enumeration e = multi.getFileNames(); // 전달된 파일들의 key값만 뽑아오기
-
-			int count = 0;
-			while (e.hasMoreElements()) {
-				String fileName = (String) e.nextElement();
+		
+		response.setCharacterEncoding("UTF-8");
+	
+		if(ServletFileUpload.isMultipartContent(request)) {
+			int maxSize = 80*1024*1024;
+			String savaPath = request.getSession().getServletContext().getRealPath("/resources/board_upfiles/");
+			MultipartRequest multi = new MultipartRequest(request, savaPath, maxSize, "UTF-8", new MyFileRenamePolicy());
+			
+			Board b = new Board();
+			b.setBoardTitle(multi.getParameter("title"));
+			b.setBoardContent(multi.getParameter("content"));
+			b.setBoardWriter(((Member)request.getSession().getAttribute("loginUser")).getUserNo()+"");
+			b.setAddress(multi.getParameter("address1")+","+multi.getParameter("address2"));
+			if(multi.getParameter("latitude") != null) {
+				b.setLatitude(Double.parseDouble(multi.getParameter("latitude")));
+			}
+			if(multi.getParameter("longitude") != null) {
+				b.setLongitude(Double.parseDouble(multi.getParameter("longitude")));
+			}
+			
+			ArrayList<Attachment> atList = new ArrayList();
+			Enumeration e = multi.getFileNames();
+			int fileLevel = Integer.parseInt(multi.getParameter("fileLength"));
+			while(e.hasMoreElements()) {
+				String fileName =  (String)e.nextElement();
 				String originName = multi.getOriginalFileName(fileName);
 				String changeName = multi.getFilesystemName(fileName);
-
 				
-				Attachment at = new Attachment();
-				at.setOriginName(originName);
-				at.setChangeName(changeName);
-				at.setFilePath("resources/board_upfiles/");
-				at.setFileLevel(count++);
-
-				list.add(at);
-
+				Attachment atImg = new Attachment();
+				atImg.setOriginName(originName);
+				atImg.setChangeName(changeName);
+				atImg.setFilePath("/resources/board_upfiles/");
+				atImg.setFileLevel(fileLevel--);
 				
-
+				atList.add(atImg);
 			}
-			int result = new mateBoardService().insertMateBoard(b, list);
-
-			HttpSession session = request.getSession();
-
-			if (result > 0) {
-
-				request.getSession().setAttribute("alertMsg", "게시글 등록 성공");
-				response.sendRedirect(request.getContextPath() + "/list.mate");
-			} else {
-
-				if (!list.isEmpty()) {
-					for (Attachment a : list) {
-						new File(savePath + a.getChangeName()).delete();
+			
+			int result = new mateBoardService().insertMateBoard(b, atList);
+			
+			if(result > 0) {
+				System.out.println("업로드 성공");
+			}else {
+				if(!atList.isEmpty()) {
+					for(Attachment a : atList) {
+						new File(savaPath+a.getChangeName()).delete();
 					}
 				}
-
-				request.setAttribute("errorMsg", "게시글 등록 실패!");
-				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 			}
-
 		}
-
-	}
-
+	}		
+	
 }

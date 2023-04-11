@@ -41,12 +41,13 @@ public class MateBoardDetailController extends HttpServlet {
 		
 		if(result>0) {
 			Board b = new mateBoardService().selectBoard(boardNo);
-			Attachment at = new mateBoardService().selectAttachment(boardNo);
 			ArrayList<Reply> list = new mateBoardService().selectReplyList(boardNo);
+			ArrayList<Attachment> atList = new mateBoardService().selectAttachment(boardNo);
 			
 			request.setAttribute("b", b);
-			request.setAttribute("at", at);
+			request.setAttribute("atList", atList);
 			request.setAttribute("list", list);
+			
 			
 			request.getRequestDispatcher("views/mateboard/mateboardDetail.jsp").forward(request, response);
 			

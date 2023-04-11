@@ -122,7 +122,7 @@ public class mateBoardDao {
 			
 			pstmt.setString(1, b.getBoardTitle());
 			pstmt.setString(2, b.getBoardContent());
-			pstmt.setInt(3, Integer.parseInt(b.getBoardWriter()));
+			pstmt.setString(3, b.getBoardWriter());
 			pstmt.setString(4, b.getAddress());
 			pstmt.setDouble(5, b.getLatitude());
 			pstmt.setDouble(6, b.getLongitude());
@@ -139,7 +139,7 @@ public class mateBoardDao {
 		return result;
 	}
 	
-	public int insertAttachment(Connection conn, ArrayList<Attachment> list) {
+	public int insertAttachment(Connection conn, ArrayList<Attachment> atlist) {
 		
 		
 		int result = 1;
@@ -148,21 +148,20 @@ public class mateBoardDao {
 		
 		String sql = prop.getProperty("insertAttachment");
 		
+		
 		try {
 		
 			pstmt = conn.prepareStatement(sql);
 			
-			for(Attachment at : list) {
-				pstmt.setString(1, at.getOriginName());
-				pstmt.setString(2, at.getChangeName());
-				pstmt.setString(3, at.getFilePath());
-				pstmt.setInt(4, at.getFileLevel());
+			for(Attachment atImg : atlist) {
+				pstmt.setString(1, atImg.getOriginName());
+				pstmt.setString(2, atImg.getChangeName());
+				pstmt.setString(3, atImg.getFilePath());
+				pstmt.setInt(4, atImg.getFileLevel());
+				
+				result *= pstmt.executeUpdate();
 			}
-			
-			
-			result *= pstmt.executeUpdate();
-		
-			
+				
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -234,8 +233,8 @@ public class mateBoardDao {
 		return b;
 	}
 	
-	public Attachment selectAttachment(Connection conn, int boardNo) {
-		Attachment at = null;
+	public ArrayList<Attachment> selectAttachment(Connection conn, int boardNo) {
+		ArrayList<Attachment> atList = new ArrayList();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		String sql = prop.getProperty("selectAttachment");
@@ -247,20 +246,25 @@ public class mateBoardDao {
 			
 			rset = pstmt.executeQuery();
 			
-			if(rset.next()) {
-				at = new Attachment();
-				at.setFileNo(rset.getInt("FILE_NO"));
-				at.setOriginName(rset.getString("ORIGIN_NAME"));
-				at.setChangeName(rset.getString("CHANGE_NAME"));
-				at.setFilePath(rset.getString("FILE_PATH"));
+			while(rset.next()) {
+			Attachment atImg = new Attachment();
+				atImg.setFileNo(rset.getInt("FILE_NO"));
+				atImg.setOriginName(rset.getString("ORIGIN_NAME"));
+				atImg.setChangeName(rset.getString("CHANGE_NAME"));
+				atImg.setFilePath(rset.getString("FILE_PATH"));
+				
+			
+				atList.add(atImg);
 			}
+			
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
 			close(rset);
 			close(pstmt);
 		}
-		return at;
+		return atList;
 		
 		
 	}
@@ -391,7 +395,7 @@ public class mateBoardDao {
 							rset.getString("USER_NICKNAME")
 						));
 				
-				System.out.println(list);
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -400,7 +404,7 @@ public class mateBoardDao {
 			close(pstmt);
 		}
 		
-		System.out.println(list);
+		
 		return list;
 	}
 

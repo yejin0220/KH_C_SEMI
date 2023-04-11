@@ -35,17 +35,14 @@ public class mateBoardService {
 		return list;
 	}
 	
-	public int insertMateBoard(Board b, ArrayList<Attachment> list) {
+	public int insertMateBoard(Board b, ArrayList<Attachment> atList) {
 		Connection conn = getConnection();
 		
 		int result1 = new mateBoardDao().insertMateBoard(conn, b);
 		
-		int result2 = 1;
+		int result2 = new mateBoardDao().insertAttachment(conn, atList);
 		
-		if(list != null) {
-			result2 = new mateBoardDao().insertAttachment(conn, list);
-		}
-		
+
 		if(result1>0 && result2>0) {
 			commit(conn);
 		}else {
@@ -84,14 +81,14 @@ public class mateBoardService {
 				
 	}
 	
-	public Attachment selectAttachment(int boardNo) {
+	public ArrayList<Attachment> selectAttachment(int boardNo) {
 		Connection conn = getConnection();
 		
-		Attachment at = new mateBoardDao().selectAttachment(conn, boardNo);
+		ArrayList<Attachment> atList = new mateBoardDao().selectAttachment(conn, boardNo);
 		
 		close(conn);
 		
-		return at;
+		return atList;
 	}
 	
 	

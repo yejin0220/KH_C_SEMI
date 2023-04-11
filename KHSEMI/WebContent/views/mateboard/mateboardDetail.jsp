@@ -135,7 +135,7 @@
 			<table>
 				<thead>
 					<%if(list == null){ %>
-						댓글없음
+						<p>댓글없음</p>
 					
 					<%}else{ %>
 						<%for(Reply r : list) {%>
@@ -241,14 +241,18 @@
 				data : {bno : <%=b.getBoardNo()%>},
 				success : function(list){
 					let result ="";
-					for(let i of list){
-						result += "<tr>"+"<div class='reply-box'>"+
-								 "<img src='resources/image2/bono.jpg' class='reply-profile'>"+
-								 "<div class='user-nick'>" +"<p id='usernick'>"+   +"</p>"+
-								 "<span id='user-reply'>"+r.reaplyContent + "</span>"+
-								 "</div>"+"</div>"+"</tr>"
+					if(list != null){ 
+						for(let i of list){
+							result += "<tr>"+"<div class='reply-box'>"+
+									 "<img src='resources/image2/bono.jpg' class='reply-profile'>"+
+									 "<div class='user-nick'>" +"<p id='usernick'>"+ i.userNickName  +"</p>"+
+									 "<span id='user-reply'>"+ i.replyContent + "</span>"+
+									 "</div>"+"</div>"+"</tr>"
+						}
+					}else{
+						result += "<p>댓글없음</p>"
 					}
-					console.log("게시글은 불러옴")
+						console.log("게시글은 불러옴")
 					$(".reply thead").html(result);
 					
 				},

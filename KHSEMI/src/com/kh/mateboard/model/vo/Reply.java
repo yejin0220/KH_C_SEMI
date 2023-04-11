@@ -130,10 +130,14 @@ public class Reply {
 
 	@Override
 	public String toString() {
-		return "Relpy [replyNo=" + replyNo + ", refBno=" + refBno + ", replyWriter=" + replyWriter + ", replyContent="
-				+ replyContent + ", createDate=" + createDate + ", status=" + status + "]";
+		return "Reply [replyNo=" + replyNo + ", refBno=" + refBno + ", replyWriter=" + replyWriter + ", replyContent="
+				+ replyContent + ", createDate=" + createDate + ", status=" + status + ", userNickname=" + userNickname
+				+ "]";
 	}
-	
+
+
+
+
 	
 	
 	
