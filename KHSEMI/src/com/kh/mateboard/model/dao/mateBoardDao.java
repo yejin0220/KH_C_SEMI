@@ -114,6 +114,7 @@ public class mateBoardDao {
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
+		System.out.println(b);
 		
 		String sql = prop.getProperty("insertMateBoard");
 		
@@ -128,7 +129,6 @@ public class mateBoardDao {
 			pstmt.setDouble(6, b.getLongitude());
 			
 			result = pstmt.executeUpdate();
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -139,7 +139,7 @@ public class mateBoardDao {
 		return result;
 	}
 	
-	public int insertAttachment(Connection conn, ArrayList<Attachment> atlist) {
+	public int insertAttachment(Connection conn, ArrayList<Attachment> atList) {
 		
 		
 		int result = 1;
@@ -153,7 +153,7 @@ public class mateBoardDao {
 		
 			pstmt = conn.prepareStatement(sql);
 			
-			for(Attachment atImg : atlist) {
+			for(Attachment atImg : atList) {
 				pstmt.setString(1, atImg.getOriginName());
 				pstmt.setString(2, atImg.getChangeName());
 				pstmt.setString(3, atImg.getFilePath());
@@ -298,7 +298,7 @@ public class mateBoardDao {
 		
 	}
 	
-	public int updateAttachment(Connection conn, Attachment at) {
+	public int updateAttachment(Connection conn, ArrayList<Attachment> atList) {
 		int result =1;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("updateAttachment");
@@ -306,10 +306,18 @@ public class mateBoardDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, at.getOriginName());
-			pstmt.setString(2, at.getChangeName());
-			pstmt.setString(3, at.getFilePath());
-			pstmt.setInt(4, at.getFileNo());
+			for(Attachment atImg : atList) {
+				pstmt.setString(1, atImg.getOriginName());
+				pstmt.setString(2, atImg.getChangeName());
+				pstmt.setString(3, atImg.getFilePath());
+				pstmt.setInt(4, atImg.getFileLevel());
+				pstmt.setInt(5, atImg.getFileNo());
+				
+				atList.add(atImg);
+				
+			}
+			
+		
 			
 			result = pstmt.executeUpdate();
 			
@@ -323,30 +331,43 @@ public class mateBoardDao {
 		
 	}
 	
-	public int insertNewAttachment(Connection conn, ArrayList<Attachment> list) {
-		int result=1;
-		PreparedStatement pstmt = null;
-		String sql = prop.getProperty("insertNewAttachment");
+	public int updateAttachmentDelete(Connection conn, ArrayList<Integer> originFileNos) {
+		int result =1;
+		PreparedStatement pstmt =null;
+		String sql = prop.getProperty("updateAttachmentDelete");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			
-			for(Attachment at : list) {
-				pstmt.setInt(1, at.getRefBno());
-				pstmt.setString(2, at.getOriginName());
-				pstmt.setString(3, at.getChangeName());
-				pstmt.setString(4, at.getFilePath());
+			for(int no : originFileNos) {
+				pstmt.setInt(1, no);
+				
+				result *=pstmt.executeUpdate();
 			}
-			
-			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
 			close(pstmt);
-		}
-		return result;
+		}return result;
 		
 	}
+	
+	
+	/*
+	 * public int insertNewAttachment(Connection conn, ArrayList<Attachment> list) {
+	 * int result=1; PreparedStatement pstmt = null; String sql =
+	 * prop.getProperty("insertNewAttachment");
+	 * 
+	 * try { pstmt = conn.prepareStatement(sql);
+	 * 
+	 * for(Attachment at : list) { pstmt.setInt(1, at.getRefBno());
+	 * pstmt.setString(2, at.getOriginName()); pstmt.setString(3,
+	 * at.getChangeName()); pstmt.setString(4, at.getFilePath()); }
+	 * 
+	 * result = pstmt.executeUpdate(); } catch (SQLException e) {
+	 * e.printStackTrace(); }finally { close(pstmt); } return result;
+	 * 
+	 * }
+	 */
 	
 	public int insertReply(Connection conn, Reply r) {
 		int result = 0;

@@ -279,7 +279,7 @@
             <img src="<%=contextPath %>/resources/메이트소개글쓰기.png" height="65">
             <div class="write-content">
              <div class="write-info"><span> 한 줄 소개글 : </span> <input type="text" placeholder="산책메이트를 위한 한 줄 소개글을 입력해주세요" size="140"></div>
-             <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content"></textarea>
+             <textarea class="walk content" cols="168" rows="15" style="resize:none;" name="content"></textarea>
             </div>
            
             <img src="<%=contextPath %>/resources/메이트 위치 정하기.png" height="68">

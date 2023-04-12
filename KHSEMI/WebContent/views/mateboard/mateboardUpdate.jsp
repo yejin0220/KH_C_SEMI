@@ -1,9 +1,9 @@
-<%@ page import="com.kh.mateboard.model.vo.Board, com.kh.common.model.Attachment, com.kh.member.model.vo.Member" %>
+<%@ page import="com.kh.mateboard.model.vo.Board, com.kh.common.model.Attachment, com.kh.member.model.vo.Member, java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
 	Board b = (Board)request.getAttribute("b");
-	Attachment at = (Attachment)request.getAttribute("at");	
+	ArrayList<Attachment> atList = (ArrayList<Attachment>)request.getAttribute("atList");
 	Member loginUser =  (Member)session.getAttribute("loginUser");
 	String contextPath = (String)request.getContextPath();
 	
@@ -42,7 +42,7 @@
       
       <br><br>
       <div class="walk-content3">
-        <form action="<%=contextPath %>/update.mate" method="post" enctype="multipart/form-data">
+        <%-- <form action="<%=contextPath %>/update.mate" method="post" enctype="multipart/form-data"> --%>
       		<input type="hidden" name="bno" value="<%= b.getBoardNo()%>">
 			<input type="hidden" name="userNo" value="<%=loginUser.getUserNo()%>">	
           <div class="walk-write">
@@ -82,7 +82,7 @@
             <img src="<%=contextPath %>/resources/메이트소개글쓰기.png" height="65">
             <div class="write-content">
              <div class="write-info"><span> 한 줄 소개글 : </span> <input type="text" placeholder="산책메이트를 위한 한 줄 소개글을 입력해주세요" size="140"></div>
-             <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content" ><%=b.getBoardContent() %></textarea>
+             <textarea class="walk" cols="168" rows="15" style="resize:none;" name="content" ><%=b.getBoardContent()%></textarea>
             </div>
            
             <img src="<%=contextPath %>/resources/메이트 위치 정하기.png" height="68">
@@ -97,29 +97,26 @@
                 <div class="items">
                   <div class="item active">
                     <div class="picture">
-                    	<%if(at != null) {%>
-                    		
-                    		
-                    		<img src="<%=contextPath %>/<%=at.getFilePath()+at.getChangeName()%>">
-                    		
-                    		<input type="hidden" name="originFileNo" value="<%=at.getFileNo() %>">
-		         			<input type="hidden" name="changeFileName" value="<%=at.getChangeName() %>">
-                    	<%} %>
+                    	<%if(atList != null){ %>
+							<%for(Attachment a : atList){ %>
+								<img src="<%=contextPath +a.getFilePath()+a.getChangeName()%>">
+							<%} %>
+						<%} %>
                     </div>
                   </div>
                 </div>
                <div class="next btn-pic"></div>
             </div>
-            <input type="file" id="image" accept="image/*" onchange="setThumbnail(event);" name="upfile" multiple/>
+            <input type="file" id="file" accept="image/*" onchange="loadImg(this);" name="file" multiple/>
             <br>
             <div class="block" style="height: 10px;"></div>
             
           </div>
           <div class="btn-div">
-            <button type="submit" class="btn-upload">수정하기</button>
+            <button type="button" class="btn-upload" onclick="reupload();">수정하기</button>
             <button type="reset" class="btn-reset"><a href="<%=contextPath%>/list.mate?currentPage=1">목록가기</a></button>
           </div>
-        </form>
+        <!-- </form> -->
       </div>
       
        <script>
@@ -223,24 +220,87 @@
 	            $("#latitude").val(latlng.getLat());
 	            $("#longitude").val(latlng.getLng());
 	        });
+	        
+	        function loadImg(inputFile) {
+	          	// inputFile : 현재 변화가 생긴 input type="file"요소
+	          	//console.log(inputFile.files.length);
+	          	
+	    		let fileLength = inputFile.files.length;
+	    	
+	          	if(inputFile.files.length != 0){
+	          		// 선택된 파일이 존재할 경우에 선택된 파일들을 읽어들여서 미리보기 생성
+	    		
+	          		for(let i=0; i<inputFile.files.length; i++){
+	              		let reader = new FileReader();
+	              		
+	          			reader.readAsDataURL(inputFile.files[i]);
+	          			
+	          			reader.onload = function(e){
+	          				let url = e.target.result;
+	          				$("<img id='contentImg"+i+"' width='150' height='120' name='contentImg"+i+"'>").appendTo(".picture");
+	          				$("#contentImg"+i).attr("src", url);
+	          				
+	          				
+	          			}
+	          		}
+	          		
+	          	}else{
+	          		$(".picture").empty();
+	          	
+	          	
+	          	}
+	    	  }
+	        
+	        
         </script>
-	<script type="text/javascript">
-	     function setThumbnail(event) {
-	       for (var image of event.target.files) {
-	         var reader = new FileReader();
-	         
-	         reader.onload = function(event) {
-	           var img = document.createElement("img");
-	           img.setAttribute("src", event.target.result);
-	           document.querySelector("div.picture").appendChild(img);
-	         };
-	
-	         console.log(image);
-	         reader.readAsDataURL(image);
-	       }
-	       
-	     }
-	</script>
+		<script>
+			function reupload(){
+				let form = new FormData();
+				let address1 =$(".address1").val();
+				let address2 = $(".address2").val();
+				let title = $(".title").val();
+				let content = $(".content").val();
+				let latitude = $("#latitude").val();
+				let longitude = $("#longitude").val();
+				let bno = $("input[name=bno]").val();
+				
+				let originFileNos = document.querySelectorAll("input[name^=originFileNo]");
+				for(let i=0; i<originFileNos.length; i++){
+					form.append("originFileNo"+i, originFileNos[i].value);
+				}
+				
+				let changeFileNames=document.querySelectorAll("input[name^=changeFileName]")
+            	for(let i=0; i<changeFileNames.length; i++){
+            		form.append("changeFileName"+i, changeFileNames[i].value);
+            	}
+            	
+				$.each($("#file")[0].files, function(index, item){
+					form.append("file"+index, item);
+				})
+				
+				form.append("title",title);
+				form.append("content", content);
+				form.append("address1", address1);
+				form.append("address2", address2);
+				form.append("latitude", latitude);
+				form.append("longitude", longitude);
+				form.append("fileLength", $("#file")[0].files.length);
+				form.append("bno",bno);
+				
+				$.ajax({
+					url:"<%=contextPath%>/update.mate",
+					data :form,
+					type:"post",
+					processData : false,
+					contentType:false,
+					success :function(data){
+						console.log("업데이트성공");
+						location.href="<%=contextPath%>/detail.mate?bno="+bno;
+					}
+				})
+				
+			}
+		</script>
 
 
 </body>

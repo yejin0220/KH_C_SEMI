@@ -5,8 +5,8 @@
 <%
 	Board b = (Board)request.getAttribute("b");
 	//Attachment at = (Attachment)request.getAttribute("at"); 
-	//ArrayList<Attachment> list = (ArrayList)request.getAttribute("list"); 
-	ArrayList<Reply> list = (ArrayList)request.getAttribute("list"); 
+	ArrayList<Attachment> atList = (ArrayList)request.getAttribute("atList"); 
+	ArrayList<Reply> list = (ArrayList<Reply>)request.getAttribute("list"); 
 	Member loginUser =  (Member)session.getAttribute("loginUser");
 	String contextPath = (String)request.getContextPath();
 
@@ -21,7 +21,7 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
 	rel="stylesheet">
-<link href="resources/css/03_mateDetail.css?after" rel="stylesheet">
+<link href="resources/css/03_mateDetail.css?afterlike" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <style>
 .btn {
@@ -107,19 +107,13 @@
 						<div class="items">
 							<div class="item active">
 								<div class="picture">
-									<%-- <%if(list == null){ %>
-									<p>아직 활동사진이 등록되지 않았습니당</p>
+									<%if(atList == null){ %>
+										<p>아직 활동사진이 등록되지 않았습니당</p>
 									<%}else { %>
-
-									<%for(int i=0; i<list.size(); i++){ %>
-
-									<img
-										src="<%=contextPath%>/<%=list.get(i).getFilePath()+list.get(i).getChangeName()%>">
-
-
-									<%} %>
-									<img src="<%=contextPath%>/<%=at.getFilePath()+at.getChangeName()%>"> 
-									<%} %> --%>
+										<%for(Attachment a : atList){ %>
+											<img src="<%=contextPath +a.getFilePath()+a.getChangeName()%>">
+										<%} %>
+									<%} %> 
 								</div>
 							</div>
 						</div>
@@ -134,7 +128,7 @@
 		<div class="reply">
 			<table>
 				<thead>
-					<%if(list == null){ %>
+					<%-- <%if(list == null){ %>
 						<p>댓글없음</p>
 					
 					<%}else{ %>
@@ -149,7 +143,7 @@
 								</div>
 							</tr>
 						<%} %> 
-					<%} %>
+					<%} %>  --%>
 						
 				</thead>
 				<tbody>
@@ -239,23 +233,20 @@
 			$.ajax({
 				url : "<%=contextPath%>/replyList",
 				data : {bno : <%=b.getBoardNo()%>},
+				dataType:"json",
 				success : function(list){
-					let result ="";
-					if(list != null){ 
+						let result="";
 						for(let i of list){
-							result += "<tr>"+"<div class='reply-box'>"+
+									result += "<tr>"+"<div class='reply-box'>"+
 									 "<img src='resources/image2/bono.jpg' class='reply-profile'>"+
 									 "<div class='user-nick'>" +"<p id='usernick'>"+ i.userNickName  +"</p>"+
 									 "<span id='user-reply'>"+ i.replyContent + "</span>"+
 									 "</div>"+"</div>"+"</tr>"
-						}
-					}else{
-						result += "<p>댓글없음</p>"
-					}
-						console.log("게시글은 불러옴")
-					$(".reply thead").html(result);
-					
-				},
+								}
+						
+						
+					$("thead").html(result);
+					},
 				error : function(){
 					console.log("안불러옴");
 				}

@@ -3,6 +3,7 @@ package com.kh.mateboard.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import com.kh.common.model.Attachment;
 import com.kh.common.model.MyFileRenamePolicy;
 import com.kh.mateboard.model.service.mateBoardService;
 import com.kh.mateboard.model.vo.Board;
+import com.kh.member.model.vo.Member;
 import com.oreilly.servlet.MultipartRequest;
 
 /**
@@ -40,10 +42,10 @@ public class MateBoardUpdateController extends HttpServlet {
 		
 		int boardNo = Integer.parseInt(request.getParameter("bno"));
 		Board b = new mateBoardService().selectBoard(boardNo);
-		Attachment at = new mateBoardService().selectAttachment(boardNo);
-		
+		ArrayList<Attachment> atList = new mateBoardService().selectAttachment(boardNo);
 		request.setAttribute("b", b);
-		request.setAttribute("at", at);
+		request.setAttribute("atList", atList);
+		
 		
 		request.getRequestDispatcher("views/mateboard/mateboardUpdate.jsp").forward(request, response);
 		
@@ -60,7 +62,7 @@ public class MateBoardUpdateController extends HttpServlet {
 		
 		//전송되는 파일을 처리할 작업내용
 		//1)전송파일용량제한
-		int maxSize = 1024*1024*10;
+		int maxSize = 1024*1024*80;
 		
 		//2)파일을 저장할서버의 폴더경로 알아내기(String savePath)
 		String savePath = request.getSession().getServletContext().getRealPath("/resources/board_upfiles/");
@@ -71,94 +73,78 @@ public class MateBoardUpdateController extends HttpServlet {
 		
 		
 		//4)db에 넘길 데이터 저장하기	
-		int boardNo = Integer.parseInt(multi.getParameter("bno"));
-		String title = multi.getParameter("title");
-		String content = multi.getParameter("content");
-		String address = multi.getParameter("address1")+","+multi.getParameter("address2");
-		String userNo = multi.getParameter("userNo");
-		double latitude = Double.parseDouble(multi.getParameter("latitude"));
-		double longitude = Double.parseDouble(multi.getParameter("longitude"));
-		
-		
 		Board b = new Board();
-		b.setBoardNo(boardNo);
-		b.setBoardTitle(title);
-		b.setBoardContent(content);
-		b.setBoardWriter(userNo);
-		b.setAddress(address);
-		b.setLatitude(latitude);
-		b.setLongitude(longitude);
+		b.setBoardTitle(multi.getParameter("title"));
+		b.setBoardContent(multi.getParameter("content"));
+		b.setBoardWriter(((Member)request.getSession().getAttribute("loginUser")).getUserNo()+"");
+		b.setAddress(multi.getParameter("address1")+","+multi.getParameter("address2"));
+		if(multi.getParameter("latitude") != null) {
+			b.setLatitude(Double.parseDouble(multi.getParameter("latitude")));
+		}
+		if(multi.getParameter("longitude") != null) {
+			b.setLongitude(Double.parseDouble(multi.getParameter("longitude")));
+		}
 		
 	
-		ArrayList<Attachment> list = new ArrayList<>();
-		
-		
-		if(multi.getOriginalFileName("upfile") != null) {
-			
-			Attachment at = new Attachment();
-			at.setOriginName(multi.getOriginalFileName("upfile"));
-			at.setChangeName(multi.getFilesystemName("upfile"));
-			at.setFilePath("resources/board_upfiles/");
-	       
-			list.add(at);
-	
-				if(multi.getParameter("originFileNo") != null) {
-					
-					at.setFileNo(Integer.parseInt(multi.getParameter("originFileNo")));
-					new File(savePath+multi.getParameter("changeFileName")).delete();
-					
-				}else {
-					
-					at.setRefBno(Integer.parseInt(multi.getParameter("bno")));
-				}
-			
-			
-			int result = new mateBoardService().updateMate(b, list, at);
-			System.out.println(at);
-			
-			if(result > 0) {
+		ArrayList<Attachment> atList = new ArrayList<>();
+		if(multi.getFileNames() != null) {
+			Enumeration e = multi.getFileNames();
+			int fileLevel=1;
+			while(e.hasMoreElements()) {
+				String fileName = (String)e.nextElement();
+				String originName = multi.getOriginalFileName(fileName);
+				String changeName = multi.getFilesystemName(fileName);
 				
-				request.getSession().setAttribute("alertMsg", "수정이 완료되었습니다.");
-				response.sendRedirect(request.getContextPath()+"/detail.mate?bno="+boardNo);
-			}else {
-				request.setAttribute("errorMsg", "게시글 수정 실패");
-				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+				Attachment atImg = new Attachment();
+				atImg.setOriginName(originName);
+				atImg.setChangeName(changeName);
+				atImg.setFilePath("resources/board_upfiles");
+				atImg.setFileLevel(fileLevel++);
+				atImg.setRefBno(Integer.parseInt(multi.getParameter("bno")));
+				
+				atList.add(atImg);
 			}
 			
-		}else {
-			request.setAttribute("errorMsg", "잘못된 접근 방식입니다.");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			int index  =0;
+			while(true) {
+				String changeFileName = multi.getParameter("changeFileName"+index++);
+				if(changeFileName == null) {
+					break;
+				}else {
+					new File(savePath+changeFileName).delete();
+				}
+			}
 		}
 		
 		
 		
+		ArrayList<Integer> originFileNos = new ArrayList<>();
+		int index2 = 0;
+		while(true) {
+			String originFileNo = multi.getParameter("originFileNo"+index2++);
+			//System.out.println(originFileNo);
+			
+			if(originFileNo == null) {
+				break;
+			}else {
+				originFileNos.add(Integer.parseInt(originFileNo));
+			}
+		}
 		
+		int result = new mateBoardService().updateMate(b, atList, originFileNos);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		if(result > 0) {
+			System.out.println("업로드 성공");
+		}else {
+			if(!atList.isEmpty()) {
+				for(Attachment a : atList) {
+					new File(savePath+a.getChangeName()).delete();
+				}
+			}
+		}
 		
 		
 	}
 
-	}
+   }
 }

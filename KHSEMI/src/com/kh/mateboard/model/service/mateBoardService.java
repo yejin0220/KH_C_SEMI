@@ -92,21 +92,22 @@ public class mateBoardService {
 	}
 	
 	
-	public int updateMate(Board b, ArrayList<Attachment> list, Attachment at) {
+	public int updateMate(Board b, ArrayList<Attachment> atList, ArrayList<Integer> originFileNos) {
 		Connection conn = getConnection();
 		
 		int result1 = new mateBoardDao().updateBoard(conn, b);
 		int result2 = 1;
+		int result3 = 1;
 		
-		if(at!=null) {
-			if(at.getFileNo() != 0) {
-				result2 = new mateBoardDao().updateAttachment(conn, at);
-			}else {
-				result2 = new mateBoardDao().insertNewAttachment(conn, list);
+		
+		if(atList.size()>0) {
+			result2 = new mateBoardDao().updateAttachment(conn, atList);
+			if(originFileNos != null) {
+				result3 = new mateBoardDao().updateAttachmentDelete(conn, originFileNos);
 			}
 		}
 		
-		if(result1>0 && result2>0) {
+		if(result1>0 && result2>0&&result3>0) {
 			commit(conn);
 		}else {
 			rollback(conn);
@@ -114,7 +115,7 @@ public class mateBoardService {
 		
 		close(conn);
 		
-		return result1 * result2;
+		return result1 * result2 *result3;
 	}
 	
 	public int insertReply(Reply r) {

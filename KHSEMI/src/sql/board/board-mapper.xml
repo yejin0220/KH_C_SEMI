@@ -83,8 +83,14 @@
 		SET ORIGIN_NAME = ?,
 			CHANGE_NAME=?,
 			FILE_PAHT=?,
+			FILE_LEVEL=?
 			UPLOAD_DATE = SYSDATE
 		WHERE FILE_NO = ?	
+	</entry>
+	<entry key="updateAttachmentDelete">
+		UPDATE ATTACHMENT
+		SET STATUS = 'N'
+		WHERE FILE_NO = ?
 	</entry>
 	<entry key="insertNewAttachment">
 		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH)
@@ -97,11 +103,11 @@
 	</entry>
 	
 	<entry key="selectReplyList">
-		SELECT REPLY_NO, REPLY_CONTENT,REF_BNO, USER_NICKNAME, CREATE_DATE, R.STATUS
-		FROM REPLY R
-		JOIN MEMBER ON(USER_NO= USER_NO)
-		WHERE R.STATUS = 'Y' AND REF_BNO=?
-		ORDER BY CREATE_DATE DESC, REPLY_NO DESC
-		
+		SELECT *
+        FROM (SELECT REPLY.*, USER_NICKNAME
+              FROM REPLY
+              JOIN MEMBER ON(REPLY_WRITER = USER_NO)
+              )
+        WHERE REF_BNO = ? AND STATUS='Y'
 	</entry>
 </properties>

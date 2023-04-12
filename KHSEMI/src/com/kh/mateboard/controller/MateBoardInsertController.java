@@ -58,8 +58,8 @@ public class MateBoardInsertController extends HttpServlet {
 	
 		if(ServletFileUpload.isMultipartContent(request)) {
 			int maxSize = 80*1024*1024;
-			String savaPath = request.getSession().getServletContext().getRealPath("/resources/board_upfiles/");
-			MultipartRequest multi = new MultipartRequest(request, savaPath, maxSize, "UTF-8", new MyFileRenamePolicy());
+			String savePath = request.getSession().getServletContext().getRealPath("/resources/board_upfiles/");
+			MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8", new MyFileRenamePolicy());
 			
 			Board b = new Board();
 			b.setBoardTitle(multi.getParameter("title"));
@@ -97,7 +97,7 @@ public class MateBoardInsertController extends HttpServlet {
 			}else {
 				if(!atList.isEmpty()) {
 					for(Attachment a : atList) {
-						new File(savaPath+a.getChangeName()).delete();
+						new File(savePath+a.getChangeName()).delete();
 					}
 				}
 			}
