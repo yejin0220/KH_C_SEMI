@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	
+	<entry key="selectListCount">
+		SELECT COUNT(*) AS COUNT
+		FROM BOARD
+		WHERE (BOARD_TYPE = 1) AND STATUS='Y'
+	</entry>
+	
+	<entry key="selectMateList">
+		SELECT *
+		FROM(	
+			SELECT ROWNUM RNUM, A.*
+			FROM 
+				(SELECT BOARD_NO,
+						BOARD_TITLE,
+						BOARD_CONTENT,
+						USER_NICKNAME,
+						B.ADDRESS,
+						B.CREATE_DATE,
+                        COUNT
+				FROM BOARD B
+				JOIN MEMBER ON (BOARD_WRITER = USER_NO)
+				WHERE BOARD_TYPE=1 AND B.STATUS='Y'
+				ORDER BY CREATE_DATE DESC
+				) A
+			)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	
+	<entry key="insertMateBoard">
+			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER, ADDRESS, LATITUDE, LONGITUDE)
+			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,?,?,?,?)
+	</entry>
+	
+	<entry key="insertAttachment">
+		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH, FILE_LEVEL)
+		VALUES(SEQ_FNO.NEXTVAL, SEQ_BNO.CURRVAL, ?,?,?,?)
+	</entry>
+	
+	<entry key="increaseCount">
+		UPDATE BOARD
+		SET COUNT = COUNT +1
+		WHERE BOARD_NO = ? AND STATUS='Y' 
+	</entry>
+	
+	<entry key="selectBoard">
+		SELECT BOARD_NO,
+			   B.ADDRESS,
+			   BOARD_TITLE,
+			   USER_NICKNAME,
+			   B.CREATE_DATE,
+			   BOARD_CONTENT,
+			   LATITUDE,
+			   LONGITUDE
+		FROM BOARD B
+		JOIN MEMBER ON(BOARD_WRITER = USER_NO)
+		WHERE BOARD_NO = ? AND B.STATUS = 'Y'
+	</entry>
+	<entry key="selectAttachment">
+		SELECT FILE_NO,
+			   ORIGIN_NAME,
+			   CHANGE_NAME,
+			   FILE_PATH
+		FROM ATTACHMENT
+		WHERE REF_BNO = ? AND STATUS='Y'
+	</entry>
+	<entry key="updateBoard">
+		UPDATE BOARD
+		SET BOARD_TITLE =?,
+			ADDRESS = ?,
+		    BOARD_CONTENT = ?,
+		    LATITUDE = ?,
+		    LONGITUDE = ?
+		WHERE BOARD_NO = ? AND STATUS= 'Y'   
+	</entry>
+	<entry key="updateAttachment">
+		UPDATE ATTACHMENT
+		SET ORIGIN_NAME = ?,
+			CHANGE_NAME=?,
+			FILE_PAHT=?,
+			FILE_LEVEL=?
+			UPLOAD_DATE = SYSDATE
+		WHERE FILE_NO = ?	
+	</entry>
+	<entry key="updateAttachmentDelete">
+		UPDATE ATTACHMENT
+		SET STATUS = 'N'
+		WHERE FILE_NO = ?
+	</entry>
+	<entry key="insertNewAttachment">
+		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH)
+		VALUES(SEQ_FNO.NEXTVAL, ?,?,?,?)
+	</entry>
+	<entry key="insertReply">
+		INSERT INTO REPLY(REPLY_NO, REF_BNO, REPLY_WRITER,REPLY_CONTENT)
+		VALUES(SEQ_RNO.NEXTVAL,?,?,?) 
+	</entry>
+	<entry key="selectReplyList">
+		SELECT *
+        FROM (SELECT REPLY.*, USER_NICKNAME
+              FROM REPLY
+              JOIN MEMBER ON(REPLY_WRITER = USER_NO)
+              )
+        WHERE REF_BNO = ? AND STATUS='Y'
+	</entry>
+	<entry key="insertRecommend">
+		INSERT INTO B_LIKE(BOARD_NO, USER_NO)
+		VALUES(?,?)
+	</entry>
+	<entry key ="selectRecommend">
+		SELECT COUNT(*) AS COUNT
+		FROM B_LIKE
+		WHERE USER_NO =? AND BOARD_NO =?
+	</entry>
+	
+	<entry key="deleteRecommend">
+		DELETE FROM B_LIKE
+		WHERE BOARD_NO = ? AND USER_NO =?
+	</entry>
+	
+</properties>
