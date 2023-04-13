@@ -58,9 +58,7 @@
 		FROM BOARD B
 		JOIN MEMBER ON(BOARD_WRITER = USER_NO)
 		WHERE BOARD_NO = ? AND B.STATUS = 'Y'
-		
 	</entry>
-	
 	<entry key="selectAttachment">
 		SELECT FILE_NO,
 			   ORIGIN_NAME,
@@ -96,12 +94,10 @@
 		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH)
 		VALUES(SEQ_FNO.NEXTVAL, ?,?,?,?)
 	</entry>
-	
 	<entry key="insertReply">
 		INSERT INTO REPLY(REPLY_NO, REF_BNO, REPLY_WRITER,REPLY_CONTENT)
 		VALUES(SEQ_RNO.NEXTVAL,?,?,?) 
 	</entry>
-	
 	<entry key="selectReplyList">
 		SELECT *
         FROM (SELECT REPLY.*, USER_NICKNAME
@@ -110,4 +106,19 @@
               )
         WHERE REF_BNO = ? AND STATUS='Y'
 	</entry>
+	<entry key="insertRecommend">
+		INSERT INTO B_LIKE(BOARD_NO, USER_NO)
+		VALUES(?,?)
+	</entry>
+	<entry key ="selectRecommend">
+		SELECT COUNT(*) AS COUNT
+		FROM B_LIKE
+		WHERE USER_NO =? AND BOARD_NO =?
+	</entry>
+	
+	<entry key="deleteRecommend">
+		DELETE FROM B_LIKE
+		WHERE BOARD_NO = ? AND USER_NO =?
+	</entry>
+	
 </properties>

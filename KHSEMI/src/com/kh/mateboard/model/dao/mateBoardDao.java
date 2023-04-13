@@ -14,6 +14,7 @@ import java.util.Properties;
 import com.kh.common.model.PageInfo;
 import com.kh.common.model.Attachment;
 import com.kh.mateboard.model.vo.Board;
+import com.kh.mateboard.model.vo.BoardLike;
 import com.kh.mateboard.model.vo.Reply;
 
 import static com.kh.common.JDBCTemplate.close;
@@ -428,5 +429,87 @@ public class mateBoardDao {
 		
 		return list;
 	}
-
+	
+	public int insertRecommend(Connection conn, int boardNo, int userNo) {
+		int result =0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("insertRecommend");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			pstmt.setInt(2, userNo);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int selectRecommend(Connection conn, int boardNo, int userNo) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectRecommend");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, userNo);
+			pstmt.setInt(2, boardNo);
+			
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				result = rset.getInt("COUNT");
+			}
+					
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+		
+	}
+	
+	public int deleteRecommend(Connection conn, int boardNo, int userNo) {
+		int result =0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("deleteRecommend");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			pstmt.setInt(2, userNo);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	/*
+	 * public ArrayList<BoardLike> recommendUpdate(Connection conn, int boardNo){
+	 * ArrayList<BoardLike> likeUpdat = new ArrayList<>(); PreparedStatement pstmt =
+	 * null; ResultSet rset = null; String sql = prop.getProperty("recommendMate");
+	 * try { pstmt = conn.prepareStatement(sql);
+	 * 
+	 * pstmt.setInt(1, boardNo);
+	 * 
+	 * rset = pstmt.executeQuery(); while(rset.next()) { BoardLike like = new
+	 * BoardLike(); like.setBoardNo(rset.getInt("BOARD_NO"));
+	 * like.setUserNo(rset.getInt("USER_NO"));
+	 * 
+	 * likeUpdat.add(like); System.out.println(likeUpdat); }
+	 * 
+	 * } catch (SQLException e) { e.printStackTrace(); }finally { close(pstmt); }
+	 * return likeUpdat; }
+	 */
 }

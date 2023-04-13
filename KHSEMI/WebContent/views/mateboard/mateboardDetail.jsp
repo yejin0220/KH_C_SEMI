@@ -208,6 +208,7 @@
 		function insertReply(){
 			$.ajax({
 				url:"<%=contextPath%>/replyInsert",
+				Type : "post",
 				data:{
 					content : $("#replyContent").val(),
 					bno		 : "<%=b.getBoardNo()%>"
@@ -234,6 +235,7 @@
 				url : "<%=contextPath%>/replyList",
 				data : {bno : <%=b.getBoardNo()%>},
 				dataType:"json",
+				async :false,
 				success : function(list){
 						let result="";
 						for(let i of list){
@@ -245,7 +247,7 @@
 								}
 						
 						
-					$("thead").html(result);
+					$(".reply thead").html(result);
 					},
 				error : function(){
 					console.log("안불러옴");

@@ -1,6 +1,7 @@
-<%@ page import="java.util.ArrayList, com.kh.mateboard.model.vo.Board, com.kh.common.model.PageInfo, com.kh.member.model.vo.Member" %>
+<%@ page
+	import="java.util.ArrayList, com.kh.mateboard.model.vo.Board, com.kh.common.model.PageInfo, com.kh.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%
    	String contextPath = request.getContextPath();
    	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
@@ -23,142 +24,171 @@
 <head>
 <meta charset="UTF-8">
 <title>산책메이트 게시판</title>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<link href="<%=contextPath%>/resources/css/01.css?after" rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+	crossorigin="anonymous"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+	crossorigin="anonymous">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<link href="<%=contextPath%>/resources/css/01.css?afterlike"
+	rel="stylesheet">
 <style>
-.boardNo, .count, .create-date{
+.boardNo, .count, .create-date {
 	display: none;
 }
-.list{
-	border:1px solid black;
-	flex-wrap:wrap;
-	width:1700px;
-	display:flex;
-	margin:0 auto;
-	padding-left:90px;
+
+.list {
+	border: 1px solid black;
+	flex-wrap: wrap;
+	width: 1700px;
+	display: flex;
+	margin: 0 auto;
+	padding-left: 90px;
 }
-#card{
-	width:300px;
-	height:400px;
-	margin-bottom:50px;
+
+#card {
+	width: 300px;
+	height: 400px;
+	margin-bottom: 50px;
 }
-#search-btn{
+
+#search-btn {
 	width: 4rem;
-    height: 3rem;
+	height: 3rem;
 }
 
-#mate_writer{
-	width:8rem;
-}
-#search-btn, #mate_write{
-    border-radius: 7px;
-    background-color: white;
-    color:rgb(106, 171, 240);
-    font-size:medium;
-    font-weight:900;
-    border: 3px solid rgb(106, 171, 240);
+#mate_writer {
+	width: 8rem;
 }
 
+#search-btn, #mate_write {
+	border-radius: 7px;
+	background-color: white;
+	color: rgb(106, 171, 240);
+	font-size: medium;
+	font-weight: 900;
+	border: 3px solid rgb(106, 171, 240);
+}
 </style>
 </head>
 <body>
 
 	<%-- <%@ include file="../common/menubar.jsp" %> --%>
-	
-	 <div class="content1">
-          <div class="content_name">
-              <img src="<%=contextPath%>/resources/왼쪽강아지.png" style="width: 40px; height: 35px;">
-              <h1>같이 걷개</h1>
-              <img src="<%=contextPath%>/resources/오른쪽강아지.png" style="width:40px; height:40px;">
-          </div>
-    </div>
-       
-     <hr><br>
-       
-     <div class="content2">
-          <p>산책메이트와 함께 특별한 시간을 만들어보세요 <br> 
-          반려인도 반려동물도 내가 원하는 동네의 다양한 친구들을 만날 수 있어요</p>
-     </div>      
-     
-     <div class="content3">
-            <form action="" method="get" class="location">
-                <div class="search_box">
-                    <select name="address1" id="" onchange="categoryChange(this)" class="address1">
-                      <option>광역시/도 선택</option>
-                      <option value="강원도">강원도</option>
-                      <option value="경기도">경기도</option>
-                      <option value="경상남도">경상남도</option>
-                      <option value="경상북도">경상북도</option>
-                      <option value="광주광역시">광주광역시</option>
-                      <option value="대구광역시">대구광역시</option>
-                      <option value="대전광역시">대전광역시</option>
-                      <option value="부산광역시">부산광역시</option>
-                      <option value="서울특별시">서울특별시</option>
-                      <option value="울산광역시">울산광역시</option>
-                      <option value="인천광역시">인천광역시</option>
-                      <option value="전라남도">전라남도</option>
-                      <option value="전라북도">전라북도</option>
-                      <option value="제주도">제주도</option>
-                      <option value="충청남도">충청남도</option>
-                      <option value="충청북도">충청북도</option>
-                    </select>
-                </div>
-                <div class="search_box">
-                    <select name="address2" id="state" class="address2">
-                        <option>군/구 선택</option>
-                    </select>
-                </div>
-                <input type="text" size="30" placeholder="제목/내용 검색" class="search-text">
-                <button type="submit" id="search-btn">검색</button>
-            </form>
-            <div class="content3-block" style="width:3%;"></div>
-            
-           	<%if(loginUser != null){ %>
-          		 <button type="button" id="mate_write"><a href="<%=contextPath%>/insert.mate" style="text-decoration: none; color:rgb(106, 171, 240);">게시판 글쓰기</a></button>
-          	<%} %>
-        </div>
-		
-		<div class="content4"></div>
-		
-		<div class="conten5">
-			<div class="list">
-				<%if(list.isEmpty()){ %>
-					<p>등록된 게시글이 없습니다..</p>
-				<%}else{ %>
-					
-					<% for(Board b : list){%>
-		                <div class="card" id="card">
-		                	<span class="boardNo" style="font-size: x-small;"><%=b.getBoardNo() %></span>
-			                <div class="card-body">
-				                    <img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">   
-				                    <span class="card-title"><%=b.getBoardWriter() %></span> 
-				                    <span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
-				                    <hr>
-				                    <div class="card-content">
-				                          	<p>	<%= b.getAddress() %></p>
-				                          	<p> <%=b.getBoardContent() %></p>
-				                    </div>
-				                    <div class="card-footer">
-				                            <img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png"><span class="thumb-number">추천수</span>
-				                            <img class="card-heart" src="<%=contextPath %>/resources/빈하트.png"><span class="heart-number">참여자수</span>
-				                    </div>
-		                    </div>
-				                     <span class="count" style="font-size: small;"><%=b.getCount() %></span>
-				                     <span class="create-date" style="font-size: small;"><%=b.getCreateDate() %></span>               
-		                </div>
-					
-					<%} %>
-					
-				<%} %>
-				</div>
+
+	<div class="content1">
+		<div class="content_name">
+			<img src="<%=contextPath%>/resources/왼쪽강아지.png"
+				style="width: 40px; height: 35px;">
+			<h1>같이 걷개</h1>
+			<img src="<%=contextPath%>/resources/오른쪽강아지.png"
+				style="width: 40px; height: 40px;">
+		</div>
+	</div>
+
+	<hr>
+	<br>
+
+	<div class="content2">
+		<p>
+			산책메이트와 함께 특별한 시간을 만들어보세요 <br> 반려인도 반려동물도 내가 원하는 동네의 다양한 친구들을 만날
+			수 있어요
+		</p>
+	</div>
+
+	<div class="content3">
+		<form action="" method="get" class="location">
+			<div class="search_box">
+				<select name="address1" id="" onchange="categoryChange(this)"
+					class="address1">
+					<option>광역시/도 선택</option>
+					<option value="강원도">강원도</option>
+					<option value="경기도">경기도</option>
+					<option value="경상남도">경상남도</option>
+					<option value="경상북도">경상북도</option>
+					<option value="광주광역시">광주광역시</option>
+					<option value="대구광역시">대구광역시</option>
+					<option value="대전광역시">대전광역시</option>
+					<option value="부산광역시">부산광역시</option>
+					<option value="서울특별시">서울특별시</option>
+					<option value="울산광역시">울산광역시</option>
+					<option value="인천광역시">인천광역시</option>
+					<option value="전라남도">전라남도</option>
+					<option value="전라북도">전라북도</option>
+					<option value="제주도">제주도</option>
+					<option value="충청남도">충청남도</option>
+					<option value="충청북도">충청북도</option>
+				</select>
 			</div>
-			
-			        
-	        <script>
+			<div class="search_box">
+				<select name="address2" id="state" class="address2">
+					<option>군/구 선택</option>
+				</select>
+			</div>
+			<input type="text" size="30" placeholder="제목/내용 검색"
+				class="search-text">
+			<button type="submit" id="search-btn">검색</button>
+		</form>
+		<div class="content3-block" style="width: 3%;"></div>
+
+		<%if(loginUser != null){ %>
+		<button type="button" id="mate_write">
+			<a href="<%=contextPath%>/insert.mate"
+				style="text-decoration: none; color: rgb(106, 171, 240);">게시판
+				글쓰기</a>
+		</button>
+		<%} %>
+	</div>
+
+	<div class="content4"></div>
+
+	<div class="conten5">
+		<div class="list">
+			<%if(list.isEmpty()){ %>
+			<p>등록된 게시글이 없습니다..</p>
+			<%}else{ %>
+
+			<% for(Board b : list){%>
+			<div class="card" id="card">
+				<div class="card-body">
+					<span class="boardNo" style="font-size: x-small;"><%=b.getBoardNo() %></span>
+					<img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">
+					<span class="card-title"><%=b.getBoardWriter() %></span> 
+					<span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
+					<hr>
+					<div class="card-content">
+						<p>
+							<%= b.getAddress() %></p>
+						<p>
+							<%=b.getBoardContent() %></p>
+					</div>
+
+				</div>
+				<div class="card-footer">
+					<img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png">
+					<input type="hidden" class="bno" name="bno" value="<%=b.getBoardNo() %>">
+					<span class="thumb-number"></span> 
+					<img class="card-heart" src="<%=contextPath %>/resources/빈하트.png" onclick="people();">
+					<span class="heart-number">참여자수</span>
+				</div>
+				<span class="count" style="font-size: small;"><%=b.getCount() %></span>
+				<span class="create-date" style="font-size: small;"><%=b.getCreateDate() %></span>
+			</div>
+
+			<%} %>
+
+			<%} %>
+		</div>
+	</div>
+
+
+	<script>
 				$(function(){
-					$(".card").click(function(){
+					$(".card-body").click(function(){
 						
 						//alert("클릭");
 						
@@ -169,51 +199,91 @@
 					})
 				})
 			</script>
-         
-             <!-- 페이징바 영역 -->
-	         <nav aria-label="Page navigation example">
-	            <ul class="pagination">
-	            
-	            <% if(currentPage != 1) { %>
-	              <li class="page-item">
-	                <a class="page-link" href="<%=contextPath %>/list.mate?currentPage=<%=currentPage -1 %>" aria-label="Previous">
-	                  <span aria-hidden="true">&laquo;</span>
-	                </a>
-	              </li>
-	        	<%} %>
-	             
-	             <%for(int i = startPage; i<=endPage; i++) { %>
-	             
-	             	<%if( i!= currentPage) { %>
-	             		<li class="page-item">
-	             			<a class="page-link" href="<%=contextPath%>/list.mate?currentPage=<%=i%>"><%=i %></a>
-	             		</li>
-	             	<%}else{ %>
-	             		<li class="page-item"><%=i %></li>
-	             	<%} %>
-		    
-	             <%} %>
-	             
-	             <%if(currentPage != maxPage){ %>
-		              <li class="page-item">
-		                <a class="page-link" href="<%=contextPath %>/list.mate?currentPage=<%=currentPage+1 %>" aria-label="Next">
-		                  <span aria-hidden="true">&raquo;</span>
-		                </a>
-		              </li>
-	              <%} %>
-	            </ul>
-	        </nav>
-	
-         
-        
+
+	<!-- 페이징바 영역 -->
+	<nav aria-label="Page navigation example">
+		<ul class="pagination">
+
+			<% if(currentPage != 1) { %>
+			<li class="page-item"><a class="page-link"
+				href="<%=contextPath %>/list.mate?currentPage=<%=currentPage -1 %>"
+				aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+			</a></li>
+			<%} %>
+
+			<%for(int i = startPage; i<=endPage; i++) { %>
+
+			<%if( i!= currentPage) { %>
+			<li class="page-item"><a class="page-link"
+				href="<%=contextPath%>/list.mate?currentPage=<%=i%>"><%=i %></a></li>
+			<%}else{ %>
+			<li class="page-item"><%=i %></li>
+			<%} %>
+
+			<%} %>
+
+			<%if(currentPage != maxPage){ %>
+			<li class="page-item"><a class="page-link"
+				href="<%=contextPath %>/list.mate?currentPage=<%=currentPage+1 %>"
+				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+			</a></li>
+			<%} %>
+		</ul>
+	</nav>
+
+
+	<script>
+        	$(function(){
+        		$(".card-thumb").click(function(){
+        			$.ajax({
+        				url : "<%=contextPath%>/recommend",
+        				type : "post",
+        				async : false,
+        				data : {bno :  $(this).next(".bno").val()},
+        				success : function(result){
+        					if(result>0){
+        						console.log("성공");
+
+        					}
+        				},
+        				error : function(){
+        					console.log("걍 실패");
+        				}
+        			})
+        		})
+        	})
+ 
+        </script>
         <script>
-	        $(function(){
+	       	 $(function(){
+	    		$(".card-thumb").click(function(){
+	    			console.log( $(this).next(".bno").val());
+	        		$.ajax({
+	        			url:"<%=contextPath%>/recommendCount",
+	        			type:"post",
+	        			data :  {bno : $(this).next(".bno").val()},
+	        			success : function(result){
+	        				$(this).attr("src", "resources/꽉찬 추천.png");
+	        				$(this).siblings(".thumb-number").text(result);
+	        				console.log("추천완료했?");
+	        			},
+	        			error : function(){
+	        				console.log("조회실패");
+	        			}
+	        		});
+	    		});
+	    	});
+        </script>
+        
+        
+        
+	<script>
+	       /*  $(function(){
 	            let num = 0;
 	            $(".card-thumb").click(function(){
 	                if(num == 0){
 	                    $(this).attr("src", "resources/꽉찬 추천.png");
-	                    $(".thumb-number").text("1");
-	                    num = 1;
+	                   
 	                }else{
 	                    $(this).attr("src","resources/빈 추천.png");
 	                    $(".thumb-number").text("추천수");
@@ -231,7 +301,7 @@
 	                    num1 = 0;
 	                }
 	            })
-	        })
+	        }) */
 	
 	        function categoryChange(e) {
 	            const state = document.getElementById("state");
@@ -301,9 +371,9 @@
         
         </script>
 
-	
-	
-	
-	
+
+
+
+
 </body>
 </html>
