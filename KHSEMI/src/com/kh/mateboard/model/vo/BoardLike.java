@@ -4,6 +4,7 @@ public class BoardLike {
 
 	private int boardNo;
 	private int userNo;
+	private int Lcount;
 	
 	public BoardLike() {
 		super();
@@ -29,6 +30,14 @@ public class BoardLike {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
+	}
+
+	public int getLcount() {
+		return Lcount;
+	}
+
+	public void setLcount(int lcount) {
+		Lcount = lcount;
 	}
 
 	@Override

@@ -19,13 +19,13 @@
   .walk-write{
     /* position: absolute; */
     margin: 0 auto;
-    border: 1px solid black;
+    border: 0px solid black;
     width: 70%;
   
     left: 13.5%;
   }
   .walk-name{
-    border: 1px solid red;
+    border: 0px solid red;
     width: 95%;
     display: inline-flex;
     margin : 8px 0px 0px 12px;

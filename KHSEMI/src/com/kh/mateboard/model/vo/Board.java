@@ -18,6 +18,7 @@ public class Board {
 	private double longitude; //	LONGITUDE
 	private String status; //	STATUS
 	private String pet; // 반려견 정보
+	private int Lcount;//추천 갯수
 	
 	
 	
@@ -78,7 +79,7 @@ public class Board {
 	}
 	
 	public Board(int boardNo, String boardTitle, String boardContent, String boardWriter, int count, Date createDate,
-			String address, String pet) {
+			String address, int Lcount) {
 		super();
 		this.boardNo = boardNo;
 		this.boardTitle = boardTitle;
@@ -87,6 +88,7 @@ public class Board {
 		this.count = count;
 		this.createDate = createDate;
 		this.address = address;
+		this.Lcount=Lcount;
 	}
 
 	
@@ -127,7 +129,7 @@ public class Board {
 	
 	
 
-	public Board(int boardNo,String boardTitle, String boardContent, String boardWriter, Date createDate, String address,double latitude,double longitude) {
+	public Board(int boardNo,String boardTitle, String boardContent, String boardWriter, Date createDate, String address,double latitude,double longitude,int count) {
 		super();
 		this.boardNo = boardNo;
 		this.boardTitle = boardTitle;
@@ -137,6 +139,7 @@ public class Board {
 		this.address = address;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.count = count;
 		
 	}
 
@@ -225,6 +228,15 @@ public class Board {
 
 	public void setPet(String pet) {
 		this.pet = pet;
+	}
+	
+	
+	public int getLcount() {
+		return Lcount;
+	}
+
+	public void setLcount(int lcount) {
+		Lcount = lcount;
 	}
 
 	@Override

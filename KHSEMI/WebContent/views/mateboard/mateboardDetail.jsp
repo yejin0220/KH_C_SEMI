@@ -3,13 +3,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	Board b = (Board)request.getAttribute("b");
-	//Attachment at = (Attachment)request.getAttribute("at"); 
-	ArrayList<Attachment> atList = (ArrayList)request.getAttribute("atList"); 
-	ArrayList<Reply> list = (ArrayList<Reply>)request.getAttribute("list"); 
-	Member loginUser =  (Member)session.getAttribute("loginUser");
-	String contextPath = (String)request.getContextPath();
-
+	Board b = (Board) request.getAttribute("b");
+//Attachment at = (Attachment)request.getAttribute("at"); 
+ArrayList<Attachment> atList = (ArrayList) request.getAttribute("atList");
+ArrayList<Reply> list = (ArrayList<Reply>) request.getAttribute("list");
+Member loginUser = (Member) session.getAttribute("loginUser");
+String contextPath = (String) request.getContextPath();
 %>
 <!DOCTYPE html>
 <html>
@@ -22,7 +21,8 @@
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
 	rel="stylesheet">
 <link href="resources/css/03_mateDetail.css?afterlike" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <style>
 .btn {
 	width: 100px;
@@ -70,8 +70,7 @@
 			</p>
 		</div>
 
-		<br>
-		<br>
+		<br> <br>
 
 		<div class="walk-content3">
 
@@ -79,13 +78,13 @@
 			<div class="walk-write">
 
 				<div class="walk-name1">
-					<span class="address">[<%=b.getAddress() %>]
-					</span> <span class="title"><%=b.getBoardTitle() %></span>
+					<span class="address">[<%=b.getAddress()%>]
+					</span> <span class="title"><%=b.getBoardTitle()%></span>
 				</div>
 				<hr>
 				<div class="walk-name2">
-					<span class="writer"><%=b.getBoardWriter() %></span> <span
-						class="createDate"><%=b.getCreateDate() %></span>
+					<span class="writer"><%=b.getBoardWriter()%></span> <span
+						class="createDate"><%=b.getCreateDate()%></span>
 				</div>
 
 				<hr>
@@ -93,7 +92,7 @@
 				<img src="resources/소개글보기-.png" height="60">
 				<div class="write-content">
 					<textarea cols="166" rows="13" style="resize: none;" name="content"
-						class="content" readonly="readonly"><%=b.getBoardContent() %></textarea>
+						class="content" readonly="readonly"><%=b.getBoardContent()%></textarea>
 				</div>
 
 				<img src="resources/메이트만날장소-.png" height="63">
@@ -107,13 +106,24 @@
 						<div class="items">
 							<div class="item active">
 								<div class="picture">
-									<%if(atList == null){ %>
-										<p>아직 활동사진이 등록되지 않았습니당</p>
-									<%}else { %>
-										<%for(Attachment a : atList){ %>
-											<img src="<%=contextPath +a.getFilePath()+a.getChangeName()%>">
-										<%} %>
-									<%} %> 
+									<%
+										if (atList == null) {
+									%>
+									<p>아직 활동사진이 등록되지 않았습니당</p>
+									<%
+										} else {
+									%>
+									<%
+										for (Attachment a : atList) {
+									%>
+									<img
+										src="<%=contextPath + a.getFilePath() + a.getChangeName()%>">
+									<%
+										}
+									%>
+									<%
+										}
+									%>
 								</div>
 							</div>
 						</div>
@@ -124,11 +134,11 @@
 
 				<br>
 				<div class="reply-area">
-	<img src="<%=contextPath %>/resources/댓글.png" height="60">
-		<div class="reply">
-			<table>
-				<thead>
-					<%-- <%if(list == null){ %>
+					<img src="<%=contextPath%>/resources/댓글.png" height="60">
+					<div class="reply">
+						<table>
+							<thead>
+								 <%if(list == null){ %>
 						<p>댓글없음</p>
 					
 					<%}else{ %>
@@ -143,24 +153,28 @@
 								</div>
 							</tr>
 						<%} %> 
-					<%} %>  --%>
-						
-				</thead>
-				<tbody>
-					
-						 	<% if(loginUser != null){ %>
-						 	<tr>
-								<div class="reply-write">
-									<div class="reply-user">
-										<img src="resources/image2/flower4.jpg" class="reply-profile">
-										<p id="user-nick" style="font-size:small;"><%=loginUser.getUserNickname()%></p>
-									</div>
-										<textarea id="replyContent" cols="160" rows="5" style="resize: none;"></textarea>
+					<%} %>  
+							</thead>
+							<tbody>
+
+								<%
+									if (loginUser != null) {
+								%>
+								<tr>
+									<div class="reply-write">
+										<div class="reply-user">
+											<img src="resources/image2/flower4.jpg" class="reply-profile">
+											<p id="user-nick" style="font-size: small;"><%=loginUser.getUserNickname()%></p>
+										</div>
+										<textarea id="replyContent" cols="160" rows="5"
+											style="resize: none;"></textarea>
 										<button class="reply-btn" onclick="insertReply();">등록하기</button>
-								</div>
-						 	</tr>
-						 	<%}else{ %>
-						 	<tr>
+									</div>
+								</tr>
+								<%
+									} else {
+								%>
+								<tr>
 									<div class="reply-write">
 										<div class="reply-user">
 											<img src="resources/image2/flower4.jpg" class="reply-profile">
@@ -171,40 +185,44 @@
 											로그인 후 이용가능한 서비스입니다.
 										</textarea>
 									</div>
-							</tr>
-						<%} %>
-					
-				</tbody>
-			</table>
-		</div>
-	</div>
+								</tr>
+								<%
+									}
+								%>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
 
 			</div>
 
 			<div class="btn-div">
-
-				<%if(loginUser != null&&loginUser.getUserNickname().equals(b.getBoardWriter())) { %>
-
-				<button class="btn reupload ">
-					<a href="<%=contextPath%>/update.mate?bno=<%=b.getBoardNo()%>" style="text-decoration: none; color: rgb(106, 171, 240);">수정하기</a>
-				</button>
-				<button class="btn delete" onclick="delete">삭제하기</button>
-				<%}else{ %>
-				<button class="btn apply">신청하기</button>
-
-				<%} %>
+				<%if (loginUser != null && loginUser.getUserNickname().equals(b.getBoardWriter())) {%>
+					<button class="btn reupload ">
+						<a href="<%=contextPath%>/update.mate?bno=<%=b.getBoardNo()%>" style="text-decoration: none; color: rgb(106, 171, 240);">수정하기</a>
+					</button>
+					<button class="btn delete" onclick="deleteMate();">삭제하기</button>
+				<%} else {%>
+					<button class="btn apply" onclick="apply();">신청하기</button>
+				<%}%>
 
 				<button type="reset " class="btn list">
 					<a href="<%=contextPath%>/list.mate?currentPage=1" style="text-decoration: none; color: gray;">목록가기</a>
 				</button>
-
-
 			</div>
-
 		</div>
 	</div>
 
 	<script>
+		function deleteMate(){
+			//게시글 삭제하기
+			location.href="<%=contextPath%>/deleteMate?bno=<%=b.getBoardNo()%>"; 
+		}
+		function apply() {
+			//산책메이트 신청하기
+			location.href="<%=contextPath%>/applyMate?bno=bno=<%=b.getBoardNo()%>";
+		}
 		function insertReply(){
 			$.ajax({
 				url:"<%=contextPath%>/replyInsert",
@@ -229,7 +247,6 @@
 				}
 			})
 		}
-		
 		function selectReplyList(){
 			$.ajax({
 				url : "<%=contextPath%>/replyList",
@@ -245,8 +262,6 @@
 									 "<span id='user-reply'>"+ i.replyContent + "</span>"+
 									 "</div>"+"</div>"+"</tr>"
 								}
-						
-						
 					$(".reply thead").html(result);
 					},
 				error : function(){

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	
 	<entry key="selectListCount">
 		SELECT COUNT(*) AS COUNT
 		FROM BOARD
 		WHERE (BOARD_TYPE = 1) AND STATUS='Y'
 	</entry>
-	
 	<entry key="selectMateList">
 		SELECT *
 		FROM(	
@@ -19,7 +17,8 @@
 						USER_NICKNAME,
 						B.ADDRESS,
 						B.CREATE_DATE,
-                        COUNT
+                        COUNT,
+                        (SELECT COUNT(*) FROM B_LIKE L WHERE L.BOARD_NO = B.BOARD_NO )  AS B_LIKE
 				FROM BOARD B
 				JOIN MEMBER ON (BOARD_WRITER = USER_NO)
 				WHERE BOARD_TYPE=1 AND B.STATUS='Y'
@@ -28,13 +27,10 @@
 			)
 		WHERE RNUM BETWEEN ? AND ?
 	</entry>
-
-	
 	<entry key="insertMateBoard">
-			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER, ADDRESS, LATITUDE, LONGITUDE)
-			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,?,?,?,?)
+			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER, ADDRESS, LATITUDE, LONGITUDE, COUNT)
+			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,?,?,?,?,0)
 	</entry>
-	
 	<entry key="insertAttachment">
 		INSERT INTO ATTACHMENT(FILE_NO, REF_BNO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH, FILE_LEVEL)
 		VALUES(SEQ_FNO.NEXTVAL, SEQ_BNO.CURRVAL, ?,?,?,?)
@@ -54,16 +50,19 @@
 			   B.CREATE_DATE,
 			   BOARD_CONTENT,
 			   LATITUDE,
-			   LONGITUDE
+			   LONGITUDE,
+			   COUNT
 		FROM BOARD B
 		JOIN MEMBER ON(BOARD_WRITER = USER_NO)
 		WHERE BOARD_NO = ? AND B.STATUS = 'Y'
 	</entry>
 	<entry key="selectAttachment">
-		SELECT FILE_NO,
+		SELECT REF_BNO,
+			   FILE_NO,
 			   ORIGIN_NAME,
 			   CHANGE_NAME,
-			   FILE_PATH
+			   FILE_PATH,
+			   FILE_LEVEL
 		FROM ATTACHMENT
 		WHERE REF_BNO = ? AND STATUS='Y'
 	</entry>
@@ -115,10 +114,28 @@
 		FROM B_LIKE
 		WHERE USER_NO =? AND BOARD_NO =?
 	</entry>
-	
 	<entry key="deleteRecommend">
 		DELETE FROM B_LIKE
 		WHERE BOARD_NO = ? AND USER_NO =?
 	</entry>
-	
+	<entry key="selectRecommendCount">
+		SELECT COUNT(*) AS COUNT
+		FROM B_LIKE
+		WHERE BOARD_NO =?
+	</entry>
+	<entry key="deleteMate">
+		UPDATE BOARD
+		SET STATUS='N'
+		WHERE BOARD_NO= ? AND BOARD_WRITER=?
+	</entry>
+	<entry key="deleteAttachment">
+		UPDATE ATTACHMENT
+		SET STATUS='N'
+		WHERE REF_BNO=?
+	</entry>
+		<entry key="deleteReply">
+		UPDATE Reply
+		SET STATUS='N'
+		WHERE REF_BNO=?
+	</entry>
 </properties>

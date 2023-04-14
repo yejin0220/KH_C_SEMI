@@ -42,8 +42,9 @@ public class MateboardListController extends HttpServlet {
 		int maxPage;
 		int startPage;
 		int endPage;
-		
 		listCount = new mateBoardService().selectListCount(); 
+		
+		
 		//총게시글의 갯수 -> Board테이블에 저장되어있는 행의 갯수
 		
 		currentPage = Integer.parseInt(request.getParameter("currentPage") == null ? "1" : request.getParameter("currentPage"));
@@ -63,7 +64,6 @@ public class MateboardListController extends HttpServlet {
 		
 		request.setAttribute("pi", pi);
 		request.setAttribute("list", list);
-		
 		
 		request.getRequestDispatcher("views/mateboard/mateboardlist.jsp").forward(request, response);
 		

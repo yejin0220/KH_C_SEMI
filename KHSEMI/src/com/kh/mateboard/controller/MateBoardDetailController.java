@@ -1,6 +1,6 @@
 package com.kh.mateboard.controller;
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -48,7 +48,8 @@ public class MateBoardDetailController extends HttpServlet {
 			request.setAttribute("atList", atList);
 			request.setAttribute("list", list);
 			
-			
+			System.out.println(b);
+			System.out.println(atList);
 			request.getRequestDispatcher("views/mateboard/mateboardDetail.jsp").forward(request, response);
 			
 		

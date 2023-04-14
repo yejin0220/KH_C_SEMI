@@ -44,8 +44,9 @@ public class Attachment {
 	
 	
 
-	public Attachment(String originName, String changeName, String filePath, int fileLevel) {
+	public Attachment(int refBno, String originName, String changeName, String filePath, int fileLevel) {
 		super();
+		this.refBno=refBno;
 		this.originName = originName;
 		this.changeName = changeName;
 		this.filePath = filePath;

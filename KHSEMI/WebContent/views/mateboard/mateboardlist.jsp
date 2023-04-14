@@ -1,5 +1,5 @@
 <%@ page
-	import="java.util.ArrayList, com.kh.mateboard.model.vo.Board, com.kh.common.model.PageInfo, com.kh.member.model.vo.Member"%>
+	import="java.util.ArrayList, com.kh.mateboard.model.vo.Board, com.kh.common.model.PageInfo, com.kh.member.model.vo.Member, com.kh.mateboard.model.vo.BoardLike"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
@@ -8,12 +8,9 @@
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
 	Member loginUser = (Member)session.getAttribute("loginUser");
 	
-	
-	
 	/* int index = address.indexOf(",");
 	String address1 = address.substring(0, index);
 	String address2 = address.substring(index+1); */
-
  	int currentPage = pi.getCurrentPage();
 	int startPage = pi.getStartPage();
 	int endPage = pi.getEndPage();
@@ -33,15 +30,12 @@
 	rel="stylesheet"
 	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
 	crossorigin="anonymous">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<link href="<%=contextPath%>/resources/css/01.css?afterlike"
-	rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<link href="<%=contextPath%>/resources/css/01.css?afterlike" rel="stylesheet">
 <style>
 .boardNo, .count, .create-date {
 	display: none;
 }
-
 .list {
 	border: 1px solid black;
 	flex-wrap: wrap;
@@ -50,22 +44,18 @@
 	margin: 0 auto;
 	padding-left: 90px;
 }
-
 #card {
 	width: 300px;
 	height: 400px;
 	margin-bottom: 50px;
 }
-
 #search-btn {
 	width: 4rem;
 	height: 3rem;
 }
-
 #mate_writer {
 	width: 8rem;
 }
-
 #search-btn, #mate_write {
 	border-radius: 7px;
 	background-color: white;
@@ -151,158 +141,101 @@
 			<%if(list.isEmpty()){ %>
 			<p>등록된 게시글이 없습니다..</p>
 			<%}else{ %>
-
-			<% for(Board b : list){%>
-			<div class="card" id="card">
-				<div class="card-body">
-					<span class="boardNo" style="font-size: x-small;"><%=b.getBoardNo() %></span>
-					<img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">
-					<span class="card-title"><%=b.getBoardWriter() %></span> 
-					<span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
-					<hr>
-					<div class="card-content">
-						<p>
-							<%= b.getAddress() %></p>
-						<p>
-							<%=b.getBoardContent() %></p>
+				<% for(Board b : list){%>
+				<div class="card" id="card">
+					<div class="card-body">
+						<span class="boardNo" style="font-size: x-small;"><%=b.getBoardNo() %></span>
+						<img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">
+						<span class="card-title"><%=b.getBoardWriter() %></span> 
+						<span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
+						<hr>
+						<div class="card-content">
+							<p><%= b.getAddress() %></p>
+							<p><%=b.getBoardContent() %></p>
+						</div>
 					</div>
-
+					<div class="card-footer">
+						<img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png" onclick="recommend();">
+						<input type="hidden" class="bno" name="bno" value="<%=b.getBoardNo() %>">
+						<span class="thumb-number"><%=b.getLcount() %></span> 
+						<img class="card-heart" src="<%=contextPath %>/resources/빈하트.png" onclick="people();">
+						<span class="heart-number">참여자수</span>
+					</div>
+					<span class="count" style="font-size: small;"><%=b.getCount() %></span>
+					<span class="create-date" style="font-size: small;"><%=b.getCreateDate() %></span>
 				</div>
-				<div class="card-footer">
-					<img class="card-thumb" src="<%=contextPath %>/resources/빈 추천.png">
-					<input type="hidden" class="bno" name="bno" value="<%=b.getBoardNo() %>">
-					<span class="thumb-number"></span> 
-					<img class="card-heart" src="<%=contextPath %>/resources/빈하트.png" onclick="people();">
-					<span class="heart-number">참여자수</span>
-				</div>
-				<span class="count" style="font-size: small;"><%=b.getCount() %></span>
-				<span class="create-date" style="font-size: small;"><%=b.getCreateDate() %></span>
-			</div>
-
-			<%} %>
-
+				<%} %>
 			<%} %>
 		</div>
 	</div>
-
-
 	<script>
 				$(function(){
 					$(".card-body").click(function(){
-						
-						//alert("클릭");
-						
 						let bno = $(this).children().eq(0).text();
-						
 						location.href='<%=contextPath%>/detail.mate?bno='+bno;
-						
 					})
 				})
-			</script>
-
+	</script>
 	<!-- 페이징바 영역 -->
 	<nav aria-label="Page navigation example">
 		<ul class="pagination">
-
 			<% if(currentPage != 1) { %>
-			<li class="page-item"><a class="page-link"
-				href="<%=contextPath %>/list.mate?currentPage=<%=currentPage -1 %>"
-				aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-			</a></li>
+				<li class="page-item"><a class="page-link"
+					href="<%=contextPath %>/list.mate?currentPage=<%=currentPage -1 %>"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+				</a></li>
 			<%} %>
-
 			<%for(int i = startPage; i<=endPage; i++) { %>
-
-			<%if( i!= currentPage) { %>
-			<li class="page-item"><a class="page-link"
-				href="<%=contextPath%>/list.mate?currentPage=<%=i%>"><%=i %></a></li>
-			<%}else{ %>
-			<li class="page-item"><%=i %></li>
+				<%if( i!= currentPage) { %>
+				<li class="page-item"><a class="page-link"
+					href="<%=contextPath%>/list.mate?currentPage=<%=i%>"><%=i %></a></li>
+				<%}else{ %>
+				<li class="page-item"><%=i %></li>
+				<%} %>
 			<%} %>
-
-			<%} %>
-
 			<%if(currentPage != maxPage){ %>
-			<li class="page-item"><a class="page-link"
-				href="<%=contextPath %>/list.mate?currentPage=<%=currentPage+1 %>"
-				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-			</a></li>
+				<li class="page-item"><a class="page-link"
+					href="<%=contextPath %>/list.mate?currentPage=<%=currentPage+1 %>"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				</a></li>
 			<%} %>
 		</ul>
 	</nav>
-
-
 	<script>
-        	$(function(){
+         	<%-- $(function(){
         		$(".card-thumb").click(function(){
-        			$.ajax({
-        				url : "<%=contextPath%>/recommend",
-        				type : "post",
-        				async : false,
-        				data : {bno :  $(this).next(".bno").val()},
-        				success : function(result){
-        					if(result>0){
-        						console.log("성공");
-
-        					}
-        				},
-        				error : function(){
-        					console.log("걍 실패");
-        				}
-        			})
+        			
+        			<% if(loginUser == null){%>
+        				alert("로그인 후 사용 가능합니다.")
+        			<%}else{%>
+	        			$.ajax({
+	        				url : "<%=contextPath%>/recommend",
+	        				type : "post",
+	        				async : false,
+	        				data : {bno :  $(this).next(".bno").val()},
+	        				success : function(result){
+	        					if(result>0){
+	        						console.log("성공");
+	        					}
+	        				},
+	        				error : function(){
+	        					console.log("걍 실패");
+	        				}
+	        			})
+        			
+        			<%}%>
         		})
         	})
- 
+  
+         	  --%>
+         	 $(function(){
+         		$(".card-thumb").click(function(){
+	       			let bno=$(this).next(".bno").val();
+	       			location.href="<%=contextPath%>/recommend?bno="+bno;
+	       		})
+         	 });
         </script>
-        <script>
-	       	 $(function(){
-	    		$(".card-thumb").click(function(){
-	    			console.log( $(this).next(".bno").val());
-	        		$.ajax({
-	        			url:"<%=contextPath%>/recommendCount",
-	        			type:"post",
-	        			data :  {bno : $(this).next(".bno").val()},
-	        			success : function(result){
-	        				$(this).attr("src", "resources/꽉찬 추천.png");
-	        				$(this).siblings(".thumb-number").text(result);
-	        				console.log("추천완료했?");
-	        			},
-	        			error : function(){
-	        				console.log("조회실패");
-	        			}
-	        		});
-	    		});
-	    	});
-        </script>
-        
-        
-        
 	<script>
-	       /*  $(function(){
-	            let num = 0;
-	            $(".card-thumb").click(function(){
-	                if(num == 0){
-	                    $(this).attr("src", "resources/꽉찬 추천.png");
-	                   
-	                }else{
-	                    $(this).attr("src","resources/빈 추천.png");
-	                    $(".thumb-number").text("추천수");
-	                    num =0;
-	                }
-	            })
-	
-	            let num1 = 0;
-	            $(".card-heart").click(function(){
-	                if(num1 == 0){
-	                    $(this).attr("src", "resources/꽉찬하트.png");
-	                    num1 = 1;
-	                }else{
-	                    $(this).attr("src","resources/빈하트.png");
-	                    num1 = 0;
-	                }
-	            })
-	        }) */
-	
 	        function categoryChange(e) {
 	            const state = document.getElementById("state");
 	
@@ -356,10 +289,8 @@
 	            } else if (e.value == "충청북도") {
 	                add = chungbuk;
 	            }
-	
 	            state.options.length = 1;
 	                // 군/구 갯수;
-	
 	                    for (property in add) {
 	                        let opt = document.createElement("option");
 	                        opt.value = add[property];
@@ -367,8 +298,6 @@
 	                        state.appendChild(opt);
 	                    }
 	        }
-
-        
         </script>
 
 

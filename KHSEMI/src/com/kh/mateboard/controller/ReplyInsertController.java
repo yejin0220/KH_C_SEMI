@@ -44,7 +44,7 @@ public class ReplyInsertController extends HttpServlet {
 		int result = new mateBoardService().insertReply(r);
 		
 		
-		System.out.println(userNo);
+		
 		response.getWriter().print(result);
 				
 		

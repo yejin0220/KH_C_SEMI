@@ -172,5 +172,32 @@ public class mateBoardService {
 		return result;
 	}
 	
+	public int selectRecommendCount(int boardNo) {
+		Connection conn = getConnection();
+		int Lcount = new mateBoardDao().selectRecommendCount(conn, boardNo);
+		close(conn);
+		return Lcount;
+	}
+	
+	public int deleteMate(int boardNo, int userNo, ArrayList<Attachment> atList, ArrayList<Reply> list) {
+		Connection conn = getConnection();
+		int result = new mateBoardDao().deleteMate(conn, boardNo, userNo);
+		int result1 =1;
+		int result2 = 1;
 
+		if(atList != null) {
+			result1 = new mateBoardDao().deleteAttachment(conn, boardNo);
+		}
+		
+		if(list != null) {
+			result2 = new mateBoardDao().deleteReply(conn, boardNo);
+		}
+		if(result >0 && result1>0 && result2>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result*result1*result2;
+	}
 }

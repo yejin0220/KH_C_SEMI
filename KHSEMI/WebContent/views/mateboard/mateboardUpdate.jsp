@@ -17,7 +17,7 @@
 <head>
 <meta charset="UTF-8">
 <title>메이트 게시판 수정하기</title>
-<link href="resources/css/04_mateUpdate.css?after" rel="stylesheet">
+<link href="resources/css/04_mateUpdate.css?afterLIKE" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 <body>
