@@ -27,6 +27,12 @@
 			)
 		WHERE RNUM BETWEEN ? AND ?
 	</entry>
+	<entry key="selectMateProfile">
+		 SELECT A.REF_MNO, A.FILE_NO, A.ORIGIN_NAME, A.CHANGE_NAME, A.FILE_PATH,B.BOARD_NO
+		FROM ATTACHMENT A
+		JOIN BOARD B ON(B.BOARD_WRITER = A.REF_MNO)
+        WHERE REF_MNO= ?
+	</entry>
 	<entry key="insertMateBoard">
 			INSERT INTO BOARD(BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, BOARD_WRITER, ADDRESS, LATITUDE, LONGITUDE, COUNT)
 			VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,?,?,?,?,0)
@@ -99,11 +105,12 @@
 	</entry>
 	<entry key="selectReplyList">
 		SELECT *
-        FROM (SELECT REPLY.*, USER_NICKNAME
+        FROM (SELECT REPLY.*, USER_NICKNAME, USER_ID
               FROM REPLY
               JOIN MEMBER ON(REPLY_WRITER = USER_NO)
               )
         WHERE REF_BNO = ? AND STATUS='Y'
+        ORDER BY CREATE_DATE DESC
 	</entry>
 	<entry key="insertRecommend">
 		INSERT INTO B_LIKE(BOARD_NO, USER_NO)
@@ -113,6 +120,7 @@
 		SELECT COUNT(*) AS COUNT
 		FROM B_LIKE
 		WHERE USER_NO =? AND BOARD_NO =?
+		
 	</entry>
 	<entry key="deleteRecommend">
 		DELETE FROM B_LIKE
@@ -137,5 +145,10 @@
 		UPDATE Reply
 		SET STATUS='N'
 		WHERE REF_BNO=?
+	</entry>
+	<entry key="deleteDetailReply">
+		UPDATE REPLY
+		SET STATUS='N'
+		WHERE REPLY_NO = ? 
 	</entry>
 </properties>

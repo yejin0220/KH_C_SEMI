@@ -1,4 +1,4 @@
-<%@ page import="com.kh.mateboard.model.vo.Board, com.kh.common.model.Attachment, com.kh.member.model.vo.Member, java.util.ArrayList" %>
+<%@ page import="com.kh.board.mateboard.model.vo.Board, com.kh.board.model.vo.Attachment, com.kh.member.model.vo.Member, java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%

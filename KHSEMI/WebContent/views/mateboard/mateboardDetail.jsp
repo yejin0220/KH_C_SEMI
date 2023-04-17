@@ -1,7 +1,8 @@
 <%@ page
-	import="com.kh.mateboard.model.vo.Board, com.kh.common.model.Attachment, com.kh.member.model.vo.Member, java.util.ArrayList, com.kh.mateboard.model.vo.Reply"%>
+	import="com.kh.board.mateboard.model.vo.Board, com.kh.board.model.vo.Attachment, com.kh.member.model.vo.Member, java.util.ArrayList, com.kh.board.mateboard.model.vo.Reply"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	Board b = (Board) request.getAttribute("b");
 //Attachment at = (Attachment)request.getAttribute("at"); 
@@ -23,7 +24,9 @@ String contextPath = (String) request.getContextPath();
 <link href="resources/css/03_mateDetail.css?afterlike" rel="stylesheet">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
 <style>
+
 .btn {
 	width: 100px;
 	height: 40px;
@@ -37,13 +40,65 @@ String contextPath = (String) request.getContextPath();
 	border: 2px solid rgb(106, 171, 240);
 }
 
-.list {
+.list, .delete-reply {
 	border: 2px solid gray;
 }
 
 .apply {
 	border: 2px solid #FF8AAE;
 	color: #FF8AAE;
+}
+.moadl-container{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: flex-start;
+            padding: 10px;
+        }
+        #modal.modal-overlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display:none;
+        }
+        #modal .modal-window {
+            background:   rgb(251, 246, 240);
+            box-shadow: 0 8px 32px 0 rgba(133, 133, 134, 0.37);
+            backdrop-filter: blur( 13.5px );
+            -webkit-backdrop-filter: blur( 13.5px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+            width: 500px;
+            height: 200px;
+            position: relative;
+            top: -100px;
+            padding: 10px;
+        }
+        .btn-area{
+            text-align: center;
+            padding-right: 25px;
+            margin-top: 25px;
+        }
+.user-reply{
+	display: flex;
+}
+.delete-reply{
+	width:70px;
+	height:20px;
+	font-size: x-small;
+	margin-top:80px;
+	
 }
 </style>
 </head>
@@ -80,11 +135,13 @@ String contextPath = (String) request.getContextPath();
 				<div class="walk-name1">
 					<span class="address">[<%=b.getAddress()%>]
 					</span> <span class="title"><%=b.getBoardTitle()%></span>
+					<input type="hidden" name="bno" value="<%= b.getBoardNo()%>">
 				</div>
 				<hr>
 				<div class="walk-name2">
-					<span class="writer"><%=b.getBoardWriter()%></span> <span
-						class="createDate"><%=b.getCreateDate()%></span>
+					<span class="writer"><%=b.getBoardWriter()%></span> 
+					<span class="createDate"><%=b.getCreateDate()%></span>
+				
 				</div>
 
 				<hr>
@@ -138,20 +195,28 @@ String contextPath = (String) request.getContextPath();
 					<div class="reply">
 						<table>
 							<thead>
-								 <%if(list == null){ %>
-						<p>댓글없음</p>
+					<%if(list == null){ %>
+						<p>아직 댓글이 없개냥!</p>
 					
 					<%}else{ %>
 						<%for(Reply r : list) {%>
 							<tr>
-								<div class="reply-box">
+							<div class="user-reply">
+								<div class="reply-box" vlaue="123">
 									<img src="resources/image2/bono.jpg" class="reply-profile">
 									<div class="reply-content">
 										<p id="user-nick" ><%=r.getUserNickname()%></p>
 										<span id="user-reply"><%=r.getReplyContent() %></span>
 									</div>
 								</div>
+								<%if(r.getUserId().equals(loginUser.getUserId())) {%>
+								<button class="delete-reply btn" onclick="deletereply();">
+									<input type="hidden" name="bno" value="<%=b.getBoardNo()%>">
+								<a href="<%=contextPath%>/deletereply?rno=<%=r.getReplyNo()%>">삭제</a></button>
+								<%} %>
+							</div>
 							</tr>
+							
 						<%} %> 
 					<%} %>  
 							</thead>
@@ -202,7 +267,7 @@ String contextPath = (String) request.getContextPath();
 					<button class="btn reupload ">
 						<a href="<%=contextPath%>/update.mate?bno=<%=b.getBoardNo()%>" style="text-decoration: none; color: rgb(106, 171, 240);">수정하기</a>
 					</button>
-					<button class="btn delete" onclick="deleteMate();">삭제하기</button>
+					<button class="btn deleteboard">삭제하기</button>
 				<%} else {%>
 					<button class="btn apply" onclick="apply();">신청하기</button>
 				<%}%>
@@ -213,8 +278,33 @@ String contextPath = (String) request.getContextPath();
 			</div>
 		</div>
 	</div>
-
+	
+	<!-- 모달창 -->
+	<div class="modal-overlay" id="modal">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3 class="modal-title" style="font-weight: bold;">게시글 삭제</h3>
+                <div type="button" class="close">X</div>
+            </div>
+            <div class="moadl-container">
+                <div class="item">
+                    <span>게시글을 삭제하시겠습니까?</span>
+                    <div class="btn-area">
+                        <button class="btn btn-primary btn-sm" onclick="deleteMate()">삭제</button>
+                        <button  class="btn btn-primary btn-sm close">취소</button>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+	
+	
 	<script>
+		$(function(){
+			$(".deleteboard").click(function(){
+				$(".modal-overlay").css("display","block");
+			})
+		})
 		function deleteMate(){
 			//게시글 삭제하기
 			location.href="<%=contextPath%>/deleteMate?bno=<%=b.getBoardNo()%>"; 
@@ -255,6 +345,7 @@ String contextPath = (String) request.getContextPath();
 				async :false,
 				success : function(list){
 						let result="";
+						
 						for(let i of list){
 									result += "<tr>"+"<div class='reply-box'>"+
 									 "<img src='resources/image2/bono.jpg' class='reply-profile'>"+
@@ -292,6 +383,13 @@ String contextPath = (String) request.getContextPath();
 	        // 지도에 마커를 표시합니다
 	        marker.setMap(map);
      </script>
+       <script>
+        $(function(){
+            $(".close").click(function(){
+                $("#modal").css("display","none");
+            })
+        })
+    </script>
 
 </body>
 </html>

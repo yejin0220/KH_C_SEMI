@@ -1,5 +1,6 @@
 <%@ page
-	import="java.util.ArrayList, com.kh.mateboard.model.vo.Board, com.kh.common.model.PageInfo, com.kh.member.model.vo.Member, com.kh.mateboard.model.vo.BoardLike"%>
+	import="java.util.ArrayList, com.kh.board.mateboard.model.vo.Board, com.kh.common.model.PageInfo, com.kh.member.model.vo.Member,
+	 com.kh.board.mateboard.model.vo.BoardLike, com.kh.board.model.vo.Attachment"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
@@ -7,6 +8,8 @@
    	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
 	Member loginUser = (Member)session.getAttribute("loginUser");
+	Attachment at =(Attachment)request.getAttribute("at");
+	
 	
 	/* int index = address.indexOf(",");
 	String address1 = address.substring(0, index);
@@ -144,9 +147,14 @@
 				<% for(Board b : list){%>
 				<div class="card" id="card">
 					<div class="card-body">
-						<span class="boardNo" style="font-size: x-small;"><%=b.getBoardNo() %></span>
-						<img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">
-						<span class="card-title"><%=b.getBoardWriter() %></span> 
+						<span class="boardNo" style="font-size: x-small;" name="boardNo"><%=b.getBoardNo() %></span>
+					
+						<%if(at == null){ %>
+							<img class="card-img" src="<%=contextPath %>/resources/분홍발자국.png">
+						<%}else{ %>
+							<img src="<%=contextPath+at.getChangeName()+at.getFilePath()%>">
+						<%} %>
+						<span class="card-title" name="boardWriter"><%=b.getBoardWriter() %></span> 
 						<span class="card-subtitle mb-2 text-muted"><%=b.getBoardTitle() %></span>
 						<hr>
 						<div class="card-content">
@@ -173,6 +181,7 @@
 					$(".card-body").click(function(){
 						let bno = $(this).children().eq(0).text();
 						location.href='<%=contextPath%>/detail.mate?bno='+bno;
+						
 					})
 				})
 	</script>
@@ -202,38 +211,16 @@
 		</ul>
 	</nav>
 	<script>
-         	<%-- $(function(){
-        		$(".card-thumb").click(function(){
-        			
-        			<% if(loginUser == null){%>
-        				alert("로그인 후 사용 가능합니다.")
-        			<%}else{%>
-	        			$.ajax({
-	        				url : "<%=contextPath%>/recommend",
-	        				type : "post",
-	        				async : false,
-	        				data : {bno :  $(this).next(".bno").val()},
-	        				success : function(result){
-	        					if(result>0){
-	        						console.log("성공");
-	        					}
-	        				},
-	        				error : function(){
-	        					console.log("걍 실패");
-	        				}
-	        			})
-        			
-        			<%}%>
-        		})
-        	})
-  
-         	  --%>
          	 $(function(){
          		$(".card-thumb").click(function(){
 	       			let bno=$(this).next(".bno").val();
 	       			location.href="<%=contextPath%>/recommend?bno="+bno;
-	       		})
+	       		
+	   
+         		});
          	 });
+         	 
+         	 
         </script>
 	<script>
 	        function categoryChange(e) {

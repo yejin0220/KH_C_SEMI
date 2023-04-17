@@ -1,10 +1,9 @@
 <%@ page import="com.kh.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-   pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%
-   String contextPath = request.getContextPath();
-   Member loginUser = (Member) session.getAttribute("loginUser");
-
+	String contextPath = request.getContextPath();
+	Member loginUser = (Member) session.getAttribute("loginUser");
 %>
 <!DOCTYPE html>
 <html>
@@ -26,7 +25,7 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <style>
 * {
-   font-family: 'Noto Sans KR', sans-serif;
+	font-family: 'Noto Sans KR', sans-serif;
 }
 html, body {height: 100%;}
  #wrap {min-height: 100%; position: relative;}
@@ -63,142 +62,142 @@ html, body {height: 100%;}
      padding-right: 9px;
  }
 .nav-area {
-   background-color: #E6F2FF;
-   align-items: center;
-   margin: auto;
+	background-color: #E6F2FF;
+	align-items: center;
+	margin: auto;
 }
 
 .menu {
-   display: table-cell;
-   height: 80px;
-   width: 250px;
+	display: table-cell;
+	height: 80px;
+	width: 250px;
 }
 
 #nav {
-   color: #FFD133;
-   font-size: 20px;
+	color: #FFD133;
+	font-size: 20px;
 }
 #nav:hover{
-   font-weight:bold;
+	font-weight:bold;
 }
 .menu a:hover {
-   font-weight: bold;
+	font-weight: bold;
 }
 
 .logo {
-   display: flex;
-   justify-content: center;
-   margin-left: 250px;
+	display: flex;
+	justify-content: center;
+	margin-left: 250px;
 }
 
 .login-area>ul>li a {
-   color: gray;
-   font-weight: bold;
+	color: gray;
+	font-weight: bold;
 }
 
 .after-login {
-   border: 1px solid black;
-   visibility: hidden;
-   width: 250px;
-   height: 100px;
-   float: right;
-   margin-top: 30px;
-   margin-right: 10px;
+	border: 1px solid black;
+	visibility: hidden;
+	width: 250px;
+	height: 100px;
+	float: right;
+	margin-top: 30px;
+	margin-right: 10px;
 }
 
 .after-login>table tr, .after-login>table td {
-   padding-top: 5px;
+	padding-top: 5px;
 }
 .after-login a{
-   text-decoration : none;
-   color : black;
+	text-decoration : none;
+	color : black;
 }
 #profile_img{
-   width:80px;
+	width:80px;
 }
 
 </style>
 </head>
 <body>
 
-   <div class="login-area">
-      <% if (loginUser == null) { %>
-         <ul class="nav justify-content-end">
-            <li class="nav-item"><a class="nav-link" href="<%= contextPath %>/login.me">로그인</a></li>
-            <li class="nav-item"><a class="nav-link" href="<%=contextPath%>/views/member/memberEnroll.jsp">회원가입</a></li>
-         </ul>
-         <!-- 로그인시 프로필창 -->
-         <div class="after-login">
-            <table>
-               <tr>
-                  <td rowspan="3" width="100px"><img src="resources/profile_basic.png" width="80px"></td>
-                  <td colspan="2" width="50px" style="font-weight: bold; color: #FFD133;"></td>
-               </tr>
-               <tr>
-                  <td colspan="2">마이페이지</td>
-               </tr>
-               <tr>
-                  <td><a href=""><img src="resources/notification.png" width="25px"></a></td>
-                  <td><a href=""><img src="resources/chat-balloon.png" width="15px"></a></td>
-               </tr>
-            </table>
-         </div>
-      <% } else { %>
-         <ul class="nav justify-content-end">
-            <li class="nav-item"><a class="nav-link" href="<%= contextPath %>/logout.me">로그아웃</a></li>
-            <li class="nav-item"><a class="nav-link">또오개냥입니다.</a></li>
-         </ul>
-         <!-- 로그인시 프로필창 -->
-         <div class="after-login">
-            <table>
-               <tr>
-                  <td rowspan="3" width="100px">
-                   <%--   <%if(loginUser.getFileName() != null) { %>
-                           <img id="profile_img" src="<%= request.getContextPath() %>/<%= loginUser.getFileName() %>">
-                        <% } else {  %>
-                           <img id="profile_img" src="resources/profile_basic.png">
-                        <% } %>   --%> 
-                  </td>
-                  <td colspan="2" width="50px" style="font-weight: bold; color: #FFD133;"><%= loginUser.getUserNickname() %>님</td>
-               </tr>
-               <tr>
-                  <td colspan="2"><a href="<%=contextPath%>/mypage.me">마이페이지</a></td>
-               </tr>
-               <tr>
-                  <td><a href=""><img src="resources/notification.png" width="25px"></a></td>
-                  <td><a href=""><img src="resources/chat-balloon.png" width="15px"></a></td>
-               </tr>
-            </table>
-         </div>
-      <% } %>
-   </div>
-   <script>
-      <% if(loginUser != null) { %>
-         $(function(){
-            $('.after-login').css("visibility","visible");
-         });
-      
-      <% } %>
-   </script>
+	<div class="login-area">
+		<% if (loginUser == null) { %>
+			<ul class="nav justify-content-end">
+				<li class="nav-item"><a class="nav-link" href="<%= contextPath %>/login.me">로그인</a></li>
+				<li class="nav-item"><a class="nav-link" href="<%=contextPath%>/views/member/memberEnroll.jsp">회원가입</a></li>
+			</ul>
+			<!-- 로그인시 프로필창 -->
+			<div class="after-login">
+				<table>
+					<tr>
+						<td rowspan="3" width="100px"><img src="resources/profile_basic.png" width="80px"></td>
+						<td colspan="2" width="50px" style="font-weight: bold; color: #FFD133;"></td>
+					</tr>
+					<tr>
+						<td colspan="2">마이페이지</td>
+					</tr>
+					<tr>
+						<td><a href=""><img src="resources/notification.png" width="25px"></a></td>
+						<td><a href=""><img src="resources/chat-balloon.png" width="15px"></a></td>
+					</tr>
+				</table>
+			</div>
+		<% } else { %>
+			<ul class="nav justify-content-end">
+				<li class="nav-item"><a class="nav-link" href="<%= contextPath %>/logout.me">로그아웃</a></li>
+				<li class="nav-item"><a class="nav-link">또오개냥입니다.</a></li>
+			</ul>
+			<!-- 로그인시 프로필창 -->
+			<div class="after-login">
+				<table>
+					<tr>
+						<td rowspan="3" width="100px">
+							<%if(loginUser.getFileName() != null) { %>
+			            		<img id="profile_img" src="<%= request.getContextPath() %>/<%= loginUser.getFileName() %>">
+		            		<% } else {  %>
+		            			<img id="profile_img" src="resources/profile_basic.png">
+		            		<% } %>	
+						</td>
+						<td colspan="2" width="50px" style="font-weight: bold; color: #FFD133;"><%= loginUser.getUserNickname() %>님</td>
+					</tr>
+					<tr>
+						<td colspan="2"><a href="<%=contextPath%>/Mypage.me">마이페이지</a></td>
+					</tr>
+					<tr>
+						<td><a href=""><img src="resources/notification.png" width="25px"></a></td>
+						<td><a href=""><img src="resources/chat-balloon.png" width="15px"></a></td>
+					</tr>
+				</table>
+			</div>
+		<% } %>
+	</div>
+	<script>
+		<% if(loginUser != null) { %>
+			$(function(){
+				$('.after-login').css("visibility","visible");
+			});
+		
+		<% } %>
+	</script>
 
-   <div class="logo">
-      <a href=""><img src="resources/logo.png" width="200px"></a>
-   </div>
+	<div class="logo">
+		<a href=""><img src="resources/logo.png" width="200px"></a>
+	</div>
 
-   <div class="nav-area">
-      <ul class="nav justify-content-center">
-         <li class="nav-item"><a class="nav-link" id="nav" href="<%=contextPath%>/list.mate?currentPage=1">같이걷개</a></li>
-         <li class="nav-item"><a class="nav-link" id="nav" href="#">멍냥수다</a></li>
-         <li class="nav-item"><a class="nav-link" id="nav" href="#">나눔&거래</a></li>
-         
-         <% if(loginUser != null && loginUser.getUserId().equals("admin")) { %>
-         <li class="nav-item"><a class="nav-link" id="nav" href="<%=contextPath%>/adminProfile">대빵용</a></li>
-         <% } else { %>
-         <li class="nav-item"><a class="nav-link disabled" id="nav" style="color: gray;">대빵용</a></li>
-         <% } %>
-      </ul>
-   </div>
-   
-   
+	<div class="nav-area">
+		<ul class="nav justify-content-center">
+			<li class="nav-item"><a class="nav-link" id="nav" href="#">같이걷개</a></li>
+			<li class="nav-item"><a class="nav-link" id="nav" href="#">멍냥수다</a></li>
+			<li class="nav-item"><a class="nav-link" id="nav" href="#">나눔&거래</a></li>
+			
+			<% if(loginUser != null && loginUser.getUserId().equals("admin")) { %>
+			<li class="nav-item"><a class="nav-link" id="nav" href="<%=contextPath%>/adminProfile">대빵용</a></li>
+			<% } else { %>
+			<li class="nav-item"><a class="nav-link disabled" id="nav" style="color: gray;">대빵용</a></li>
+			<% } %>
+		</ul>
+	</div>
+	
+	
 </body>
 </html>

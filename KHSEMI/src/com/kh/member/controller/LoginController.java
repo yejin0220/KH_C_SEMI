@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.kh.board.model.vo.Attachment;
 import com.kh.member.model.service.MemberService;
 import com.kh.member.model.vo.Member;
 
@@ -49,22 +50,25 @@ public class LoginController extends HttpServlet {
 		String userPwd = request.getParameter("userPwd");
 		
 		Member loginUser = new MemberService().loginMember(userId, userPwd);
+		Attachment at = new MemberService().memberListImg(userId);
+		
 		
 		if(loginUser == null) {
-			request.setAttribute("errorMsg", "·Î±×ÀÎ¿¡ ½ÇÆĞÇÏ¼Ì½À´Ï´Ù.");
+			request.setAttribute("errorMsg", "ë¡œê·¸ì¸ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.");
 			
 			RequestDispatcher view = request.getRequestDispatcher("views/common/errorPage.jsp");
 			
 			view.forward(request, response);
 		} else {
+			if(at != null) {
+				loginUser.setFileName(at.getFilePath()+at.getChangeName());
+			}
 			HttpSession session = request.getSession();
 			
 			session.setAttribute("loginUser", loginUser);
-			session.setAttribute("alertMsg", "·Î±×ÀÎ ¼º°ø~!.");
 			
 			response.sendRedirect(request.getContextPath());
 		}
-		
 	}
 
 }
